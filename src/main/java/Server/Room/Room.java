@@ -17,7 +17,7 @@ import Common.Model.SocketModel.UserInfo;
 //人を集めてゲームを開始するまでを扱う。 
 public class Room {
     public static final int minUserNum = 2; 
-    public static final int maxUserNum = 6;
+    public static final int maxUserNum = 3;
 
     private RoundManager roundManager=null; //roundGameを司る。
 

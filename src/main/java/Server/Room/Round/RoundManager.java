@@ -59,7 +59,7 @@ public class RoundManager extends Thread {
     }
 
     public void end(){
-        this.round.End();
+        if(round!=null) round.End();
 
         this.isPlaying=false;
         this.round = null; 
