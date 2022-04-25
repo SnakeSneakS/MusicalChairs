@@ -1,14 +1,12 @@
-import java.io.*;
-import java.net.*;
+import Client.GameFrame;
+import Server.Server;
 
 // Client と Server の main を実行するだけのクラス。
-public class Controller implements Runnable {
+public class ServerClient implements Runnable {
     static String[] port = {"8080"};
     public static void main (String[] args) {
         // ポート番号を入れる配列
-
-        // 配列を渡して main を呼ぶ。
-        Thread server = new Thread(new Controller());
+        Thread server = new Thread(new ServerClient());
         server.start();
         GameFrame.main(port);
     }

@@ -1,0 +1,3 @@
+# Usage
+- run Server.java 
+
