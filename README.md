@@ -31,3 +31,8 @@
 - /Client/GameFrame.javaのmain()内のclientNumで実行するクライアントの数を変えられる
 - /build.gradleのmainClassで実行するクラスを変えられる(サーバーのみ動かす、クライアントのみ動かす、など) 
 
+# 椅子の座標の計算
+$cr = \mathrm{circleRadius}\ (椅子の半径),\ margin = 椅子同士の余白,\ r = (x_p, y_p) と椅子の中心座標の距離$.
+
+分かりにくすぎる
+![](pastedImages/2022-04-29-18-43-03.png)
