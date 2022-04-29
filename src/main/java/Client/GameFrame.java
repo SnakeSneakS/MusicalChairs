@@ -254,7 +254,7 @@ public class GameFrame extends JFrame {
 
      
     public static void main (String[] args) {
-        final int clientNum = 5; //幾つのクライアントを動作させるか 
+        final int clientNum = 3; //幾つのクライアントを動作させるか 
         Thread[] t = new Thread[clientNum];
         for(int i=0;i<clientNum;i++){
             t[i] = new Thread(){
