@@ -4,6 +4,7 @@
 2. build: ```gradle build```
 3. run: ```gradle run``` 
 4. if you want to clean, run ```gradle clean```.
+fjeifneinfienfinin
 
 
 # Settings
