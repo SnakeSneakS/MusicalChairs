@@ -51,6 +51,7 @@ public class Round extends Thread {
                         //TODO: ダメージを受けるかどうかみて、ダメージを受けた場合、減ったHPと対象のUserIDに対して「
                             //room.Publish(new DamagedRes(UserID, HP))
                         //」を実行する;
+                        room.Publish(new DamegedRes(UserID, HP));
                     }
                 }
             }.start();
@@ -91,6 +92,44 @@ public class Round extends Thread {
         roundUsers.get(userID).position.MoveTo( moveReq.x, moveReq.y ); 
         MoveRes moveRes = new MoveRes(userID, moveReq.x, moveReq.y);
         room.Publish( moveRes );
+
+        
+        /* 当たり判定(ユークリッド距離) */ 
+        public Position(){}
+        public Position(double x1, double y1){this.x1=x1; this.y1=y1;}
+        //椅子の座標
+        public Position(int x2,int y2){
+            x2 = 350;
+            y2 = 350; //とりあえず350にしてる...椅子の座標取得したい
+        }
+        //プレイヤーと椅子の当たり判定
+        public double Distance(Position position){
+            public boolean collision = false;
+            double getdistance = Math.sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2));
+            if(getdistance <= 40.0){ //当たり判定(HPを20削る)
+                collision = true;
+                HP -= 20;
+                return HP;
+            }
+        }
+        
+        public int x3, y3;
+        x3 = roundUsers.get(userID).position.x;
+        y3 = roundUsers.get(userID).position.y;
+        //プレイヤー同士の当たり判定
+        public double Distance(Position position){
+            // 当たり判定(collision)
+            public boolean collision = false;
+            double getdistance = Math.sqrt((x3-x1)*(x3-x1)+(y3-y1)*(y3-y1));
+            //プレイヤーの円の半径＝40
+            if(getdistance <= 40.0){
+                collision = true;
+                //HP減る
+                HP -= 20;
+                return HP;
+            }
+        }
+        room.Publish(new DamagedRes(UserID, HP));
 
         //TODO: 座るかどうか判定し、座る場合、SitDown(userIDを実行する) 
         //とりあえず(350)との距離が30以下ならば座るようにしているが、「椅子に座る」ように修正が必要。
