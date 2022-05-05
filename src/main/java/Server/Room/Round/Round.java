@@ -93,42 +93,38 @@ public class Round extends Thread {
         MoveRes moveRes = new MoveRes(userID, moveReq.x, moveReq.y);
         room.Publish( moveRes );
 
-        
-        /* 当たり判定(ユークリッド距離) */ 
-        public Position(){}
-        public Position(double x1, double y1){this.x1=x1; this.y1=y1;}
-        //椅子の座標
-        public Position(int x2,int y2){
-            x2 = 350;
-            y2 = 350; //とりあえず350にしてる...椅子の座標取得したい
-        }
-        //プレイヤーと椅子の当たり判定
-        public double Distance(Position position){
-            public boolean collision = false;
-            double getdistance = Math.sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2));
-            if(getdistance <= 40.0){ //当たり判定(HPを20削る)
-                collision = true;
-                HP -= 20;
-                return HP;
-            }
-        }
-        
-        public int x3, y3;
-        x3 = roundUsers.get(userID).position.x;
-        y3 = roundUsers.get(userID).position.y;
-        //プレイヤー同士の当たり判定
-        public double Distance(Position position){
-            // 当たり判定(collision)
-            public boolean collision = false;
-            double getdistance = Math.sqrt((x3-x1)*(x3-x1)+(y3-y1)*(y3-y1));
-            //プレイヤーの円の半径＝40
-            if(getdistance <= 40.0){
-                collision = true;
-                //HP減る
-                HP -= 20;
-                return HP;
-            }
-        }
+        /* 当たり判定(ユークリッド距離) */
+        public static class UserPosition{
+            public int x1, x2;
+            public UserPosition(){}
+            public UserPosition(int x1, int y1){this.x1=x1; this.y1=y1;}
+            //以下で椅子の座標を取得したい．．．とりあえず350
+            public int x2, y2 = 350;
+                public double Distance(UserPosition position){
+                    private boolean collision = false;
+                    double getdistance;
+                    getdistance = Math.sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2));
+                    return getdistance;
+                    if (getdistance <= 40){
+                        collision = true;
+                        //HP下げる？？
+                    }
+                }
+                //プレイヤー同士の当たり判定
+                public double Distance(UserPosition position){
+                    public boolean collision = false;
+                    public double x3, y3;
+                    x3 = x1-roundUsers.get(userID).position.x;
+                    y3 = y1-roundUsers.get(userID).position.y;
+                    double getdistance = Math.sqrt(x3*x3+y3*y3);
+                    return getdistance;
+                    if(getdistance <= 40){
+                        collision = true;
+                        //HP下げる？？
+                    }
+                }
+            } 
+
         room.Publish(new DamagedRes(UserID, HP));
 
         //TODO: 座るかどうか判定し、座る場合、SitDown(userIDを実行する) 
