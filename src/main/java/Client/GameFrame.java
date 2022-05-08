@@ -42,7 +42,7 @@ public class GameFrame extends JFrame {
 
     //my info
     public int myID = 0;
-    public String myUsername = "my-name";
+    public static String myUsername = "my-name";
     public boolean isInRoom = false;
 
     final Client client;
@@ -82,7 +82,8 @@ public class GameFrame extends JFrame {
                     if(matchStartRes.isSuccess){
                         isInRoom=true;
                         myID=matchStartRes.UserID; 
-                        addPlayer(myUsername, myID);
+                        String username = getUsername();
+                        addPlayer(username, myID);
                         System.out.println("handleMatchStartRes: match succeeded!!\n");
                     }else{
                         System.err.println("handleMatchStartRes: match failed!!\n");
@@ -125,18 +126,31 @@ public class GameFrame extends JFrame {
                 }
                 @Override
                 public void handleRoundEndRes(RoundEndRes roundEndRes) {
-                    System.out.printf("Round ended! Servived users: SIZE=%d, SurvivedUserIDs[ ", roundEndRes.UserIDs.length);
+                    JFrame jFrame = new JFrame();
+                    JOptionPane.showMessageDialog(jFrame, "Round ended! Servived users:"+roundEndRes.UserIDs.length+"");
+
+                    // System.out.printf("Round ended! Servived users: SIZE=%d, SurvivedUserIDs[ ", roundEndRes.UserIDs.length);
                     for(int i=0;i<roundEndRes.UserIDs.length;i++){
-                        System.out.printf("%d, ", roundEndRes.UserIDs[i]);
+                        JOptionPane.showMessageDialog(jFrame, "SurvivedUserIDs["+roundEndRes.UserIDs[i]+"]");
+                        addPlayer(myUsername, roundEndRes.UserIDs[i]);
                     }
-                    System.out.printf("]\n");
+                    
+                    // System.out.printf("]\n");
                 }
                 @Override
                 public void handleGameEndRes(GameEndRes gameEndRes) {
-                    System.out.println("Game END!!");
+                    JFrame jFrame = new JFrame();
+                    JOptionPane.showMessageDialog(jFrame, "Game END!!");
                 }
+             
                 @Override
                 public void handlePlayMusicRes(PlayMusicRes playMusicRes) {
+                    // try {
+                    //     FileInputStream file = new FileInputStream("C:\\Users\\haya\\Downloads\\3465543474.mp3");
+                    //     Player playMp3 = new Player(file);
+                    //     playMp3.play();
+                    // } catch (Exception e) {
+                    // }
                     System.out.printf("play music? %s\n", playMusicRes.isPlay);
                 }
             };
@@ -251,8 +265,19 @@ public class GameFrame extends JFrame {
         getContentPane().setCursor(Toolkit.getDefaultToolkit().createCustomCursor(  
                         image, new Point(0,0), "null_cursor"));  
     }
-
      
+    public static String getUsername(){
+        JFrame jFrame = new JFrame();
+        return JOptionPane.showInputDialog(jFrame, "Enter your username");
+    }
+
+
+
+    // public static String roundover(){
+    //     JFrame jFrame1 = new JFrame();
+    //     return JOptionPane.showMessageDialog(jFrame1, "Hello there! How are you today?");
+    // }
+
     public static void main (String[] args) {
         final int clientNum = 3; //幾つのクライアントを動作させるか 
         Thread[] t = new Thread[clientNum];
@@ -262,10 +287,15 @@ public class GameFrame extends JFrame {
                 public void run() {
                     // フレーム作成
                     new GameFrame();
+
                 }
             };
             t[i].start();
         }
+        // Player player = goc.getPlayer(MoveRes.UserID);
+        // player.UserInfo(100, getUsername());
+        // myUsername = username; 
+        // System.out.println(username);
 
         try{
             for(int i=0;i<clientNum;i++){
