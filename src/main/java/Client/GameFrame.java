@@ -25,6 +25,18 @@ import Common.Model.SocketModel.PlayMusicRes;
 import Common.Model.SocketModel.RoomUsersInfoRes;
 import Common.Model.SocketModel.RoundEndRes;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+ 
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+
 // 描画担当
 public class GameFrame extends JFrame {
     final String hostname = "localhost";
@@ -142,15 +154,46 @@ public class GameFrame extends JFrame {
                     JFrame jFrame = new JFrame();
                     JOptionPane.showMessageDialog(jFrame, "Game END!!");
                 }
+
+                //wavファイル用意
+                public static Clip createClip(File path){
+                    try (AudioInputStream ais = AudioSystem.getAudioInputStream(path)){
+			
+                        //ファイルの形式取得
+                        AudioFormat af = ais.getFormat();
+                        
+                        //単一のオーディオ形式を含む指定した情報からデータラインの情報オブジェクトを構築
+                        DataLine.Info dataLine = new DataLine.Info(Clip.class,af);
+                        
+                        //指定された Line.Info オブジェクトの記述に一致するラインを取得
+                        Clip c = (Clip)AudioSystem.getLine(dataLine);
+                        
+                        //再生準備完了
+                        c.open(ais);
+                        
+                        return c;
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    } catch (UnsupportedAudioFileException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (LineUnavailableException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                }
              
                 @Override
                 public void handlePlayMusicRes(PlayMusicRes playMusicRes) {
-                    // try {
-                    //     FileInputStream file = new FileInputStream("C:\\Users\\haya\\Downloads\\3465543474.mp3");
-                    //     Player playMp3 = new Player(file);
-                    //     playMp3.play();
-                    // } catch (Exception e) {
-                    // }
+                    Clip clip = createClip(new File("C:\\Users\\yhaya\\OneDrive\\ドキュメ ント\\futta-dream.wav"));
+                    clip.start();
+                    try {
+                        Thread.sleep(3000);
+                    } catch (InterruptedException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
                     System.out.printf("play music? %s\n", playMusicRes.isPlay);
                 }
             };
@@ -265,7 +308,8 @@ public class GameFrame extends JFrame {
         getContentPane().setCursor(Toolkit.getDefaultToolkit().createCustomCursor(  
                         image, new Point(0,0), "null_cursor"));  
     }
-     
+    
+    //ユーザー名を入力させるポップアップ
     public static String getUsername(){
         JFrame jFrame = new JFrame();
         return JOptionPane.showInputDialog(jFrame, "Enter your username");
@@ -292,6 +336,7 @@ public class GameFrame extends JFrame {
             };
             t[i].start();
         }
+
         // Player player = goc.getPlayer(MoveRes.UserID);
         // player.UserInfo(100, getUsername());
         // myUsername = username; 
