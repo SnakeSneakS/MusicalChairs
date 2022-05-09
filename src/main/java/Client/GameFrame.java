@@ -315,13 +315,6 @@ public class GameFrame extends JFrame {
         return JOptionPane.showInputDialog(jFrame, "Enter your username");
     }
 
-
-
-    // public static String roundover(){
-    //     JFrame jFrame1 = new JFrame();
-    //     return JOptionPane.showMessageDialog(jFrame1, "Hello there! How are you today?");
-    // }
-
     public static void main (String[] args) {
         final int clientNum = 3; //幾つのクライアントを動作させるか 
         Thread[] t = new Thread[clientNum];
@@ -336,11 +329,6 @@ public class GameFrame extends JFrame {
             };
             t[i].start();
         }
-
-        // Player player = goc.getPlayer(MoveRes.UserID);
-        // player.UserInfo(100, getUsername());
-        // myUsername = username; 
-        // System.out.println(username);
 
         try{
             for(int i=0;i<clientNum;i++){
