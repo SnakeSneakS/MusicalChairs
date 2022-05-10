@@ -38,15 +38,18 @@ public class GameObjectController {
         Player p = new Player(name, ID, playerRadius, gf.gr2);
         players.add(p);
 
-        System.out.println(chairs);
-
         // 椅子を配置。人数より１少ない
         if (numberOfPlayers > 1) chairs.add(new Chair(chairRadius));
-        double theta = 2*Math.PI/chairs.size();
-        double r = (chairRadius + margin)/Math.sin(theta/2);
-        for (int i = 0; i < chairs.size(); i++) {
-            chairs.get(i).setPosition((int)Math.round(gf.width/2 + r*Math.sin(theta * i)), (int)Math.round(gf.height/2 - r*Math.cos(theta * i)));
+        if(numberOfPlayers==2){
+            chairs.get(0).setPosition( gf.width/2, gf.height/2 );
+        }else{
+            double theta = 2*Math.PI/chairs.size();
+            double r = (chairRadius + margin)/Math.sin(theta/2);
+            for (int i = 0; i < chairs.size(); i++) {
+                chairs.get(i).setPosition((int)Math.round(gf.width/2 + r*Math.sin(theta * i)), (int)Math.round(gf.height/2 - r*Math.cos(theta * i)));
+            }
         }
+        
         return p;
     }
 
