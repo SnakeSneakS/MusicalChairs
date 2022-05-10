@@ -54,7 +54,7 @@ public class GameFrame extends JFrame {
 
     //my info
     public int myID = 0;
-    public static String myUsername = "my-name";
+    public String myUsername = "my-name";
     public boolean isInRoom = false;
 
     final Client client;
@@ -232,20 +232,9 @@ public class GameFrame extends JFrame {
         //matchStart
         //TODO: 名前を入力した後にmatchStartを呼び出すようにしたい。
         client.Send( new MatchStartReq(this.myUsername) ); //名前を送ってその名前でマッチするようにサーバーに申請する。 
-        //TODO: GameStartReqもユーザーが全員揃ったあとに送りたい。今は適当に1秒まった後に開始してみているが...UIで実装求む。
-        new Thread(){
-            @Override
-            public void run() { 
-                try{
-                    sleep(1000); 
-                    client.Send( new GameStartReq() );
-                }catch(Exception e){
-                    System.err.print(e);
-                }
-            }
-        }.start();
-
-
+        
+        gamestartreq();
+        
         // eventListener
         Input m = new Input(this);
         addMouseListener(m);
@@ -269,6 +258,7 @@ public class GameFrame extends JFrame {
         // アニメーション描画
         run();
     }
+
 
     private void addPlayer(String username, int id){
         if(goc.getPlayer(id)!=null){
@@ -327,6 +317,26 @@ public class GameFrame extends JFrame {
         JFrame jFrame = new JFrame();
         return JOptionPane.showInputDialog(jFrame, "Enter your username");
     }
+
+    public void gamestartreq(){
+        JFrame jFrame = new JFrame();
+        int result = JOptionPane.showConfirmDialog(jFrame, "Do you want to start a game?");
+
+        if (result == 0){
+            client.Send( new GameStartReq() );
+            System.out.println("You pressed Yes");
+        }
+        else if (result == 1){
+            System.out.println("You pressed NO");
+            System.exit(1);
+        }
+        else{
+            System.out.println("You pressed Cancel");
+            System.exit(1);
+        }
+    }
+    
+    
 
     public static void main (String[] args) {
         final int clientNum = 3; //幾つのクライアントを動作させるか 
