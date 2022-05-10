@@ -94,8 +94,7 @@ public class GameFrame extends JFrame {
                     if(matchStartRes.isSuccess){
                         isInRoom=true;
                         myID=matchStartRes.UserID; 
-                        String username = getUsername();
-                        addPlayer(username, myID);
+                        addPlayer(myUsername, myID);
                         System.out.println("handleMatchStartRes: match succeeded!!\n");
                     }else{
                         System.err.println("handleMatchStartRes: match failed!!\n");
@@ -144,9 +143,21 @@ public class GameFrame extends JFrame {
                     // System.out.printf("Round ended! Servived users: SIZE=%d, SurvivedUserIDs[ ", roundEndRes.UserIDs.length);
                     for(int i=0;i<roundEndRes.UserIDs.length;i++){
                         JOptionPane.showMessageDialog(jFrame, "SurvivedUserIDs["+roundEndRes.UserIDs[i]+"]");
-                        addPlayer(myUsername, roundEndRes.UserIDs[i]);
                     }
-                    
+                    for(int j=0; j<goc.players.size();j++){
+                        int checkID=goc.players.get(j).ID;
+                        boolean isSurvived=false;
+                        for(int i=0;i<roundEndRes.UserIDs.length;i++){
+                            if(checkID==roundEndRes.UserIDs[i]){
+                                isSurvived=true;
+                                break;
+                            }
+                        }
+                        if(!isSurvived){
+                            goc.deletePlayer(checkID);
+                            if(checkID==myID) JOptionPane.showMessageDialog(jFrame, "I'm loser");
+                        }
+                    }
                     // System.out.printf("]\n");
                 }
                 @Override
@@ -156,7 +167,7 @@ public class GameFrame extends JFrame {
                 }
 
                 //wavファイル用意
-                public static Clip createClip(File path){
+                public Clip createClip(File path){
                     try (AudioInputStream wav = AudioSystem.getAudioInputStream(path)){
 			
                         //ファイルの形式取得
@@ -215,6 +226,8 @@ public class GameFrame extends JFrame {
             }
         };
         client.Connect();
+
+        myUsername = getUsername();
 
         //matchStart
         //TODO: 名前を入力した後にmatchStartを呼び出すようにしたい。

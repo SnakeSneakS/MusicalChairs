@@ -38,6 +38,8 @@ public class GameObjectController {
         Player p = new Player(name, ID, playerRadius, gf.gr2);
         players.add(p);
 
+        System.out.println(chairs);
+
         // 椅子を配置。人数より１少ない
         if (numberOfPlayers > 1) chairs.add(new Chair(chairRadius));
         double theta = 2*Math.PI/chairs.size();
@@ -46,6 +48,20 @@ public class GameObjectController {
             chairs.get(i).setPosition((int)Math.round(gf.width/2 + r*Math.sin(theta * i)), (int)Math.round(gf.height/2 - r*Math.cos(theta * i)));
         }
         return p;
+    }
+
+    void deletePlayer (int ID){
+        for(int i = 0 ; i<players.size(); i++){
+            if(players.get(i).ID==ID) players.remove(i);
+        }
+        numberOfPlayers--;
+
+        // chairs.remove(0);
+        // double theta = 2*Math.PI/chairs.size();
+        // double r = (chairRadius + margin)/Math.sin(theta/2);
+        // for (int i = 0; i < chairs.size(); i++) {
+        //     chairs.get(i).setPosition((int)Math.round(gf.width/2 + r*Math.sin(theta * i)), (int)Math.round(gf.height/2 - r*Math.cos(theta * i)));
+        // }
     }
 
     // ID でプレイヤーを返す。見つからなければ null を返す
