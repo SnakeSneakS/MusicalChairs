@@ -101,9 +101,9 @@ public class SocketModel {
     //ラウンド終了
     public static class RoundEndRes extends Res{
         public int[] UserIDs;
-        public String myUsername; //生き残ったユーザーのid。ここに含まれていないユーザーは敗北扱いとなる。
+        // public String myUsername; //生き残ったユーザーのid。ここに含まれていないユーザーは敗北扱いとなる。
         public RoundEndRes(){}
-        public RoundEndRes(int[] UserIDs){this.UserIDs=UserIDs; this.myUsername=myUsername; }
+        public RoundEndRes(int[] UserIDs){this.UserIDs=UserIDs;}
     }
 
     //ゲーム終了。ユーザーが1人だけ生き残ったor全員生き残ったとき。

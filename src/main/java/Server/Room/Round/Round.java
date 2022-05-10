@@ -54,7 +54,7 @@ public class Round extends Thread {
                         //TODO: ダメージを受けるかどうかみて、ダメージを受けた場合、減ったHPと対象のUserIDに対して「
                             // room.Publish(new DamagedRes(UserID, HP))
                         //」を実行する;
-                        room.Publish(new DamegedRes(UserID, HP));
+                        // room.Publish(new DamegedRes(UserID, HP));
                     }
                 }
             }.start();
@@ -89,6 +89,43 @@ public class Round extends Thread {
         }
     }
 
+    // public static class UserPosition{
+    //     public Integer x1, x2;
+    //     public UserPosition(){}
+    //     public UserPosition(Integer x1, Integer y1){this.x1=x1; this.y1=y1;}
+    //     //以下で椅子の座標を取得したい．．．とりあえず350
+    //     //椅子との当たり判定
+    //     public int x2, y2 = 350;
+    //         public double Distance(UserPosition position){
+    //             double getdistance;
+    //             for(int i = 0; i < chairs.size(); i++){
+    //                 double x2 = x1 - chairs.get(i).setPosition.x;
+    //                 double y2 = y1 - chairs.get(i).setPosition.y;
+    //                 getdistance = Math.sqrt(x2*x2+y2*y2);
+    //                 return getdistance;
+    //                 if (getdistance <= 40){
+    //                     collision = true;
+    //                      //HP下げる？？
+    //                     this.HP -= 20;
+    //                     room.Publish( moveRes );
+    //                 }
+    //             }
+    //         }
+    //          //プレイヤー同士の当たり判定
+    //         public Double Distance(UserPosition position){
+    //             double x3 = x1-roundUsers.get(userID).position.x;
+    //             double y3 = y1-roundUsers.get(userID).position.y;
+    //             double getdistance = Math.sqrt(x3*x3+y3*y3);
+    //             return getdistance;
+    //             if(getdistance <= 40){
+    //                 collision = true;
+    //                  //HP下げる？？
+    //                 this.HP -= 20;
+    //                 room.Publish( moveRes );
+    //             }
+    //         }
+    // } 
+
     public synchronized void handleMoveReq(MoveReq moveReq, int userID){
         // TODO: MoveReqの時の処理を記述する。
         // TODO: 当たり判定を実装するなら当たり判定とか? ダメージを受ける場合はroom.PublishでDamagedResを送信する。(下のMoveResを参照) 
@@ -97,44 +134,9 @@ public class Round extends Thread {
         room.Publish( moveRes );
         //メソッドを使用する
         /* 当たり判定(ユークリッド距離) */
-        public static class UserPosition{
-            public Integer x1, x2;
-            public UserPosition(){}
-            public UserPosition(Integer x1, Integer y1){this.x1=x1; this.y1=y1;}
-            //以下で椅子の座標を取得したい．．．とりあえず350
-            //椅子との当たり判定
-            public int x2, y2 = 350;
-                public double Distance(UserPosition position){
-                    double getdistance;
-                    for(int i = 0; i < chairs.size(); i++){
-                        double x2 = x1 - chairs.get(i).setPosition.x;
-                        double y2 = y1 - chairs.get(i).setPosition.y;
-                        getdistance = Math.sqrt(x2*x2+y2*y2);
-                        return getdistance;
-                        if (getdistance <= 40){
-                            collision = true;
-                             //HP下げる？？
-                            this.HP -= 20;
-                            room.Publish( moveRes );
-                        }
-                    }
-                }
-                 //プレイヤー同士の当たり判定
-                public Double Distance(UserPosition position){
-                    double x3 = x1-roundUsers.get(userID).position.x;
-                    double y3 = y1-roundUsers.get(userID).position.y;
-                    double getdistance = Math.sqrt(x3*x3+y3*y3);
-                    return getdistance;
-                    if(getdistance <= 40){
-                        collision = true;
-                         //HP下げる？？
-                        this.HP -= 20;
-                        room.Publish( moveRes );
-                    }
-                }
-        } 
+      
 
-        room.Publish(new DamagedRes(UserID, HP));
+        // room.Publish(new DamagedRes(UserID, HP));
 
         //TODO: 座るかどうか判定し、座る場合、SitDown(userIDを実行する) 
         //とりあえず(350)との距離が30以下ならば座るようにしているが、「椅子に座る」ように修正が必要。

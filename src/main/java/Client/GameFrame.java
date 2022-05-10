@@ -157,19 +157,19 @@ public class GameFrame extends JFrame {
 
                 //wavファイル用意
                 public static Clip createClip(File path){
-                    try (AudioInputStream ais = AudioSystem.getAudioInputStream(path)){
+                    try (AudioInputStream wav = AudioSystem.getAudioInputStream(path)){
 			
                         //ファイルの形式取得
-                        AudioFormat af = ais.getFormat();
+                        AudioFormat format = wav.getFormat();
                         
                         //単一のオーディオ形式を含む指定した情報からデータラインの情報オブジェクトを構築
-                        DataLine.Info dataLine = new DataLine.Info(Clip.class,af);
+                        DataLine.Info dataLine = new DataLine.Info(Clip.class,format);
                         
                         //指定された Line.Info オブジェクトの記述に一致するラインを取得
                         Clip c = (Clip)AudioSystem.getLine(dataLine);
                         
                         //再生準備完了
-                        c.open(ais);
+                        c.open(wav);
                         
                         return c;
                     } catch (MalformedURLException e) {
@@ -186,10 +186,10 @@ public class GameFrame extends JFrame {
              
                 @Override
                 public void handlePlayMusicRes(PlayMusicRes playMusicRes) {
-                    Clip clip = createClip(new File("C:\\Users\\yhaya\\OneDrive\\ドキュメ ント\\futta-dream.wav"));
+                    Clip clip = createClip(new File("C:\\Users\\yhaya\\Downloads\\futta-dream.wav"));
                     clip.start();
                     try {
-                        Thread.sleep(3000);
+                        Thread.sleep(60000);
                     } catch (InterruptedException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
