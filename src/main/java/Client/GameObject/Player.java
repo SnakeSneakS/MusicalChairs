@@ -12,7 +12,7 @@ public class Player extends GameObject {
 
     
 
-    private String name;
+    public String name;
     public int ID;
     public int HP = 100;
     public int playerRadius;

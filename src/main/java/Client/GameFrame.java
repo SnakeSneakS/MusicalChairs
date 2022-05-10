@@ -59,6 +59,8 @@ public class GameFrame extends JFrame {
 
     final Client client;
 
+    Clip clip = createClip(new File("C:\\Users\\yhaya\\Downloads\\futta-dream.wav"));
+
     GameFrame () {
         // 詳細は https://www.javadrive.jp/tutorial/jframe/
         super("椅子取りゲーム");
@@ -138,12 +140,7 @@ public class GameFrame extends JFrame {
                 @Override
                 public void handleRoundEndRes(RoundEndRes roundEndRes) {
                     JFrame jFrame = new JFrame();
-                    JOptionPane.showMessageDialog(jFrame, "Round ended! Servived users:"+roundEndRes.UserIDs.length+"");
 
-                    // System.out.printf("Round ended! Servived users: SIZE=%d, SurvivedUserIDs[ ", roundEndRes.UserIDs.length);
-                    for(int i=0;i<roundEndRes.UserIDs.length;i++){
-                        JOptionPane.showMessageDialog(jFrame, "SurvivedUserIDs["+roundEndRes.UserIDs[i]+"]");
-                    }
                     for(int j=0; j<goc.players.size();j++){
                         int checkID=goc.players.get(j).ID;
                         boolean isSurvived=false;
@@ -163,49 +160,25 @@ public class GameFrame extends JFrame {
                 @Override
                 public void handleGameEndRes(GameEndRes gameEndRes) {
                     JFrame jFrame = new JFrame();
-                    JOptionPane.showMessageDialog(jFrame, "Game END!!");
-                }
-
-                //wavファイル用意
-                public Clip createClip(File path){
-                    try (AudioInputStream wav = AudioSystem.getAudioInputStream(path)){
-			
-                        //ファイルの形式取得
-                        AudioFormat format = wav.getFormat();
-                        
-                        //単一のオーディオ形式を含む指定した情報からデータラインの情報オブジェクトを構築
-                        DataLine.Info dataLine = new DataLine.Info(Clip.class,format);
-                        
-                        //指定された Line.Info オブジェクトの記述に一致するラインを取得
-                        Clip c = (Clip)AudioSystem.getLine(dataLine);
-                        
-                        //再生準備完了
-                        c.open(wav);
-                        
-                        return c;
-                    } catch (MalformedURLException e) {
-                        e.printStackTrace();
-                    } catch (UnsupportedAudioFileException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (LineUnavailableException e) {
-                        e.printStackTrace();
+                    if(goc.players.size()==1){
+                        JOptionPane.showMessageDialog(jFrame, "Game END!! Winner is:"+goc.players.get(0).name);
                     }
-                    return null;
+                    else{
+                        JOptionPane.showMessageDialog(jFrame, "Game END!! No Winner");
+                    }
+
                 }
              
                 @Override
                 public void handlePlayMusicRes(PlayMusicRes playMusicRes) {
-                    Clip clip = createClip(new File("C:\\Users\\yhaya\\Downloads\\futta-dream.wav"));
-                    clip.start();
-                    try {
-                        Thread.sleep(60000);
-                    } catch (InterruptedException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
+                    if(playMusicRes.isPlay==true){
+                        clip.start();
                     }
-                    System.out.printf("play music? %s\n", playMusicRes.isPlay);
+                    else{
+                        System.out.println("stopped");
+                        clip.stop();
+                    }
+                    // System.out.printf("play music? %s\n", playMusicRes.isPlay);
                 }
             };
 
@@ -234,7 +207,7 @@ public class GameFrame extends JFrame {
         client.Send( new MatchStartReq(this.myUsername) ); //名前を送ってその名前でマッチするようにサーバーに申請する。 
         
         gamestartreq();
-        
+
         // eventListener
         Input m = new Input(this);
         addMouseListener(m);
@@ -258,7 +231,36 @@ public class GameFrame extends JFrame {
         // アニメーション描画
         run();
     }
+    
+    //wavファイル用意
+    public Clip createClip(File path){
+        try (AudioInputStream wav = AudioSystem.getAudioInputStream(path)){
 
+            //ファイルの形式取得
+            AudioFormat format = wav.getFormat();
+            
+            //単一のオーディオ形式を含む指定した情報からデータラインの情報オブジェクトを構築
+            DataLine.Info dataLine = new DataLine.Info(Clip.class,format);
+            
+            //指定された Line.Info オブジェクトの記述に一致するラインを取得
+            Clip c = (Clip)AudioSystem.getLine(dataLine);
+            
+            //再生準備完了
+            c.open(wav);
+            
+            return c;
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (UnsupportedAudioFileException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (LineUnavailableException e) {
+            e.printStackTrace();
+        }
+        return null;
+    } 
+        
 
     private void addPlayer(String username, int id){
         if(goc.getPlayer(id)!=null){
@@ -335,8 +337,7 @@ public class GameFrame extends JFrame {
             System.exit(1);
         }
     }
-    
-    
+       
 
     public static void main (String[] args) {
         final int clientNum = 2; //幾つのクライアントを動作させるか 

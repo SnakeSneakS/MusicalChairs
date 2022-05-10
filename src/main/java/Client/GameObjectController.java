@@ -59,12 +59,16 @@ public class GameObjectController {
         }
         numberOfPlayers--;
 
-        // chairs.remove(0);
-        // double theta = 2*Math.PI/chairs.size();
-        // double r = (chairRadius + margin)/Math.sin(theta/2);
-        // for (int i = 0; i < chairs.size(); i++) {
-        //     chairs.get(i).setPosition((int)Math.round(gf.width/2 + r*Math.sin(theta * i)), (int)Math.round(gf.height/2 - r*Math.cos(theta * i)));
-        // }
+        chairs.remove(0);
+        if(numberOfPlayers==2){
+            chairs.get(0).setPosition( gf.width/2, gf.height/2 );
+        }else{
+            double theta = 2*Math.PI/chairs.size();
+            double r = (chairRadius + margin)/Math.sin(theta/2);
+            for (int i = 0; i < chairs.size(); i++) {
+                chairs.get(i).setPosition((int)Math.round(gf.width/2 + r*Math.sin(theta * i)), (int)Math.round(gf.height/2 - r*Math.cos(theta * i)));
+            }
+        }
     }
 
     // ID でプレイヤーを返す。見つからなければ null を返す

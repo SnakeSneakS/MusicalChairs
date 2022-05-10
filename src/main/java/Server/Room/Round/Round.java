@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import Common.Model.GameModel.Position;
 import Common.Model.GameModel.User;
@@ -59,18 +60,18 @@ public class Round extends Thread {
                 }
             }.start();
 
-            for(int i=0;i<20;i++){
-                System.out.printf( "Playing music: %d\n", (i++)*500 );
-                sleep(500);
-            }
+            this.canSit=false;
+            room.Publish(new PlayMusicRes(true)); 
+
+            Random random = new Random();
+
+            sleep(random.nextInt(20000) + 7000 );
             room.Publish(new PlayMusicRes(false));
             this.canSit=true;
             for(int i=0;i<6;i++){
                 System.out.printf("Can Sit Down: %d\n", i*1000);
                 sleep(1000);
             }
-            this.canSit=false;
-            room.Publish(new PlayMusicRes(true)); 
         }catch(Exception e){
             System.err.println(e);
         }
