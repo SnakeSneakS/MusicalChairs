@@ -59,7 +59,7 @@ public class GameFrame extends JFrame {
 
     final Client client;
 
-    Clip clip = createClip(new File("C:\\Users\\yhaya\\Downloads\\futta-dream.wav"));
+    Clip clip = createClip(new File("resources/futta-dream.wav"));
 
     GameFrame () {
         // 詳細は https://www.javadrive.jp/tutorial/jframe/
