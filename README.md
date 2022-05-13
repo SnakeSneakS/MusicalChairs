@@ -37,3 +37,7 @@ $cr = \mathrm{circleRadius}\ (椅子の半径),\ margin = 椅子同士の余白,
 
 分かりにくすぎる
 ![](pastedImages/2022-04-29-18-43-03.png)
+
+
+# 議事録
+- [議事録](https://hackmd.io/dfl9Z-KDSAu5qTyQEfvXHg) 
