@@ -56,7 +56,10 @@ public class JsonHandler {
             else if(jsonClass.equals(SocketModel.GameStartReq.class.getName())){
                 SocketModel.GameStartReq gameStartReq = mapper.readValue(json, SocketModel.GameStartReq.class);
                 handleGameStartReq(gameStartReq);
-            }
+            }else if(jsonClass.equals(SocketModel.SitDownReq.class.getName())){
+                SocketModel.SitDownReq sitDownReq = mapper.readValue(json, SocketModel.SitDownReq.class);
+                handleSitDownReq(sitDownReq);
+            }   
             else{
                 System.err.printf("Unhandling class: %s\n", jsonClass);
             }
@@ -77,6 +80,9 @@ public class JsonHandler {
     }
     public void handleGameStartReq(SocketModel.GameStartReq gameStartReq){
         //System.out.printf("handle data: %s\n", gameStartReq ); 
+    }
+    public void handleSitDownReq(SocketModel.SitDownReq sitDownReq){
+        System.out.printf("handle data: %s\n", sitDownReq); 
     }
 }
 

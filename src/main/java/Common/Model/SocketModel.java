@@ -69,6 +69,11 @@ public class SocketModel {
         public GameStartRes(boolean isSuccess){ this.isSuccess = isSuccess; }
     }
 
+    //クリックイベント(座る時) 
+    public static class SitDownReq extends Req{
+        public SitDownReq(){}
+    }  
+
     //移動
     public static class MoveReq extends Req{
         public Integer x;
