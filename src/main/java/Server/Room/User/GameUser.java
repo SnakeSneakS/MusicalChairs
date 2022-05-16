@@ -31,6 +31,11 @@ public class GameUser {
             public void handleMoveReq(MoveReq moveReq) {
                 if(room!=null) room.room_handleMoveReq(moveReq, user.UserID);
             };
+
+            @Override
+            public void handleSitDownReq(SitDownReq sitDownReq) {
+                if(room!=null) room.room_handleSitDownReq(sitDownReq, user.UserID);
+            }
         };
     }
 

@@ -12,6 +12,7 @@ import Common.Model.SocketModel.MoveReq;
 import Common.Model.SocketModel.MoveRes;
 import Common.Model.SocketModel.DamagedRes;
 import Common.Model.SocketModel.PlayMusicRes;
+import Common.Model.SocketModel.SitDownReq;
 import Server.Room.Room;
 import Server.Room.User.GameUser;
 
@@ -127,26 +128,33 @@ public class Round extends Thread {
     //         }
     // } 
 
+    //移動リクエストを受け取った時に実行される。
     public synchronized void handleMoveReq(MoveReq moveReq, int userID){
-        // TODO: MoveReqの時の処理を記述する。
-        // TODO: 当たり判定を実装するなら当たり判定とか? ダメージを受ける場合はroom.PublishでDamagedResを送信する。(下のMoveResを参照) 
+        // TODO: 当たり判定を実装するなら当たり判定とか? ダメージを受ける場合はroom.PublishでDamagedResを送信する。56行目付近
         roundUsers.get(userID).position.MoveTo( moveReq.x, moveReq.y ); 
         MoveRes moveRes = new MoveRes(userID, moveReq.x, moveReq.y);
         room.Publish( moveRes );
-        //メソッドを使用する
-        /* 当たり判定(ユークリッド距離) */
-      
 
-        // room.Publish(new DamagedRes(UserID, HP));
+    }
 
-        //TODO: 座るかどうか判定し、座る場合、SitDown(userIDを実行する) 
-        //とりあえず(350)との距離が30以下ならば座るようにしているが、「椅子に座る」ように修正が必要。
-        if(canSit && new Position(350,350).Distance(new Position(moveReq.x, moveReq.y))<100){
-            Boolean isSitDown = SitDown(userID);
-            if(isSitDown){
-                System.out.printf("座るのに成功した: UserID=%d\n", userID);
-            }else{
-                System.out.printf("座るのに失敗した: UserID=%d\n", userID);
+    //椅子に座るかどうかを判定する
+    //クリックを押した時に実行される。
+    public synchronized void handleSitDownReq(SitDownReq sitDownReq, int userID){
+        if(roundUsers.containsKey(userID)){
+            System.out.printf("SitDownReq: {userID: %d, position: %s}\n", userID, roundUsers.get(userID).position);
+
+            //例えばこんな感じ? 本当は椅子とのあれこれをしたい。
+            //座れたかどうかを判定
+            //メソッドを使用する
+            /* 当たり判定(ユークリッド距離) */
+            // room.Publish(new DamagedRes(UserID, HP));
+            if(canSit && new Position(350,350).Distance(new Position(roundUsers.get(userID).position.x, roundUsers.get(userID).position.y))<100){
+                Boolean isSitDown = SitDown(userID);
+                if(isSitDown){
+                    System.out.printf("座るのに成功した: UserID=%d\n", userID);
+                }else{
+                    System.out.printf("座るのに失敗した or 既に座っている: UserID=%d\n", userID);
+                }
             }
         }
     }

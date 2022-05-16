@@ -7,6 +7,10 @@ application{
     mainClass = "ServerClient" //Client.GameFrame //Server.Server //ServerClient
 }
 
+compileJava {
+    options.encoding = 'UTF-8'
+}
+
 repositories {
     mavenCentral()
 }

@@ -3,8 +3,10 @@ package Client;
 import java.awt.event.*;
 
 import Client.GameObject.Player;
+import Common.Model.SocketModel;
 import Common.Model.GameModel.Position;
 import Common.Model.SocketModel.MoveReq;
+import Common.Model.SocketModel.SitDownReq;
 
 // カーソル位置 http://www.maroon.dti.ne.jp/koten-kairo/works/Java3D/mouse3.html
 // クリック http://www.maroon.dti.ne.jp/koten-kairo/works/Java3D/mouse3.html
@@ -43,6 +45,7 @@ public class Input extends MouseAdapter {
     @Override
     public void mouseClicked (MouseEvent e) {
         //MoveReq req = new MoveReq( -100, -100 ); gf.client.Send( req );
+        gf.client.Send( new SitDownReq() ); 
     }
 
     @Override
