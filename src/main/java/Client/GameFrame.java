@@ -34,6 +34,7 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.DataLine;
+import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
@@ -59,7 +60,7 @@ public class GameFrame extends JFrame {
 
     final Client client;
 
-    Clip clip = createClip(new File("C:\\Users\\yhaya\\Downloads\\futta-dream.wav"));
+    Clip clip = createClip(new File("C:\\Users\\yhaya\\Downloads\\futta-festa.wav"));
 
     GameFrame () {
         // 詳細は https://www.javadrive.jp/tutorial/jframe/
@@ -166,13 +167,14 @@ public class GameFrame extends JFrame {
                     else{
                         JOptionPane.showMessageDialog(jFrame, "Game END!! No Winner");
                     }
-
                 }
              
                 @Override
                 public void handlePlayMusicRes(PlayMusicRes playMusicRes) {
                     if(playMusicRes.isPlay==true){
                         clip.start();
+                        FloatControl ctrl = (FloatControl)clip.getControl(FloatControl.Type.MASTER_GAIN);
+                        ctrl.setValue((float)Math.log10((float)0.6 / 20)*20);
                     }
                     else{
                         System.out.println("stopped");

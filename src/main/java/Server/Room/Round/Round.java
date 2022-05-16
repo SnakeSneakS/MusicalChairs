@@ -63,9 +63,9 @@ public class Round extends Thread {
             this.canSit=false;
             room.Publish(new PlayMusicRes(true)); 
 
-            Random random = new Random();
+            Random random = new Random(); 
 
-            sleep(random.nextInt(20000) + 7000 );
+            sleep(random.nextInt(20000) + 9000 );
             room.Publish(new PlayMusicRes(false));
             this.canSit=true;
             for(int i=0;i<6;i++){
