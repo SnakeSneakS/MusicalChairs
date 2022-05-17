@@ -18,11 +18,11 @@ public class GameObjectController {
     GameFrame gf;
 
     // 椅子の円の半径
-    int chairRadius = 50;
+    public static int chairRadius = 50;
     // 椅子同士のマージン (2倍空く)
-    int margin = 10;
+    public static int margin = 10;
     // プレイヤーの円の半径
-    int playerRadius = 40;
+    public static int playerRadius = 40;
     // 線の太さ
     int lineWidth = 2;
 

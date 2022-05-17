@@ -12,6 +12,7 @@ public class GameModel {
         public Position(){}
         public Position(Integer x, Integer y){ this.x=x; this.y=y; }
         public void MoveTo(Integer x, Integer y){ this.x=x; this.y=y; }
+        public void setPosition(Integer x, Integer y){ this.x=x; this.y=y; }
         @Override
         public String toString() {
             return "("+x.toString()+","+y.toString()+")";

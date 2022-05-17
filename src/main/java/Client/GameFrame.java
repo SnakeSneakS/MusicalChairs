@@ -43,8 +43,8 @@ public class GameFrame extends JFrame {
     final int port = 8080;
 
     // ウィンドウの内側の高さと幅
-    final int height = 700;
-    final int width = 700;
+    public static final int height = 700;
+    public static final int width = 700;
     final GameObjectController goc;
     final int fps = 30; //60
     // 仮想スクリーン http://www.f.waseda.jp/sakas/java/JavaGraphics.html
@@ -134,7 +134,7 @@ public class GameFrame extends JFrame {
                 @Override
                 public void handleDamagedRes(DamagedRes damagedRes) {
                     Player player = goc.getPlayer(damagedRes.UserID);
-                    if(damagedRes.UserID!=myID) player.HP = damagedRes.HP; 
+                    player.HP = damagedRes.HP; 
                     System.out.printf("handleDamagedRes: UserID=%s, HP=%s\n", damagedRes.UserID, damagedRes.HP);
                 }
                 @Override
