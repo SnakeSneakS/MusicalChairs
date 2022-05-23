@@ -1,7 +1,9 @@
 package Server.Room.Round;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import Common.Model.SocketModel.GameEndRes;
 import Common.Model.SocketModel.MoveReq;
@@ -16,11 +18,18 @@ public class RoundManager extends Thread {
     public boolean isPlaying=false;
     public Round round=null;
     Room room;
+    Map<Integer, RoundCommonStatus> statusMap;
 
     private List<Integer> survivedUserIDs;
 
     public RoundManager(Room room){
         this.room = room; 
+        
+        this.statusMap=new HashMap<>();
+        for(GameUser u: room.users.values()){
+            statusMap.put(u.user.UserID, new RoundCommonStatus());
+        }
+
         survivedUserIDs = new ArrayList<Integer>();
         for(GameUser user: room.users.values()){
             survivedUserIDs.add(user.user.UserID);
@@ -33,7 +42,7 @@ public class RoundManager extends Thread {
         while(isPlaying){
             try{
                 try{
-                    round = new Round(this.room, this.survivedUserIDs);
+                    round = new Round(this.room, this.statusMap, this.survivedUserIDs);
                     round.start();
 
                     round.join(); //roundが終わるのを待つ
@@ -79,5 +88,14 @@ public class RoundManager extends Thread {
 
     public void handleSitDownReq(SitDownReq sitDownReq, int userID){
         if(this.round!=null) round.handleSitDownReq(sitDownReq, userID);
+    }
+
+    //全ラウンドで共通のステータスを管理する
+    public static class RoundCommonStatus{
+        public int HP;
+
+        RoundCommonStatus(){
+            this.HP=100;
+        }
     }
 }

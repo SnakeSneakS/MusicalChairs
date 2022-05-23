@@ -1,6 +1,7 @@
 package Server.Room.Round;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 import Client.GameObjectController;
@@ -19,6 +20,7 @@ import Common.Model.SocketModel.PlayMusicRes;
 import Common.Model.SocketModel.SitDownReq;
 import Common.Model.SocketModel.SitDownRes;
 import Server.Room.Room;
+import Server.Room.Round.RoundManager.RoundCommonStatus;
 import Server.Room.User.GameUser;
 import Client.GameFrame;
 
@@ -52,11 +54,16 @@ public class Round extends Thread {
 
 
 
-    public Round(Room room, List<Integer> survivedUserIDs){
+    public Round(Room room, Map<Integer,RoundCommonStatus> statusMap, List<Integer> survivedUserIDs){
         this.room = room;
         this.roundUsers = new ConcurrentHashMap<>();
         for(GameUser user: room.users.values()){
-            roundUsers.put(user.user.UserID, new RoundUser(user));
+            if(statusMap.containsKey(user.user.UserID)){
+                roundUsers.put(user.user.UserID, new RoundUser(user, statusMap.get(user.user.UserID)));
+            }else{
+                roundUsers.put(user.user.UserID, new RoundUser(user, new RoundCommonStatus()));
+                System.err.printf("Failed to fetch status of userid %d, so create new status.\n", user.user.UserID);
+            }
         }
         this.initialRoundUsers = survivedUserIDs.size();
         this.roomSurvivedUserIDs = new ArrayList<>();
@@ -150,8 +157,8 @@ public class Round extends Thread {
             if (getdistance <= GameObjectController.chairRadius + GameObjectController.playerRadius){
                 //HP下げる？？
                 //2秒ごとに発動
-                if(user.HP > 0) user.HP -= 10;
-                room.Publish(new DamagedRes(user.user.UserID, user.HP));
+                if(user.status.HP > 0) user.status.HP -= 10;
+                room.Publish(new DamagedRes(user.user.UserID, user.status.HP));
                 user.isdamaged = true;
                 new Thread(){
                     @Override
@@ -180,8 +187,8 @@ public class Round extends Thread {
                     if(getdistance <= 2*GameObjectController.playerRadius){
                         //HP下げる？？
                         //2秒ごとに発動
-                        if(roundUsers.get(myID).HP > 0) roundUsers.get(myID).HP -= 10;
-                        room.Publish(new DamagedRes(myID, roundUsers.get(myID).HP));
+                        if(roundUsers.get(myID).status.HP > 0) roundUsers.get(myID).status.HP -= 10;
+                        room.Publish(new DamagedRes(myID, roundUsers.get(myID).status.HP));
                         roundUsers.get(myID).isdamaged = true;
                         new Thread(){
                             @Override
@@ -219,7 +226,7 @@ public class Round extends Thread {
             System.out.printf("SitDownReq: {userID: %d, position: %s}\n", userID, roundUsers.get(userID).position);
 
             //ユーザーが生きているか判定
-            if(roundUsers.get(userID).HP<=0){
+            if(roundUsers.get(userID).status.HP<=0){
                 return;
             }
 
@@ -254,11 +261,11 @@ public class Round extends Thread {
         public boolean isdamaged = false;
         public User user;
         public Position position;
-        public Integer HP;
+        public RoundCommonStatus status;
 
-        public RoundUser(GameUser gameUser){
+        public RoundUser(GameUser gameUser, RoundCommonStatus status){
             this.position = new Position(0, 0);
-            this.HP = 100; 
+            this.status = status; 
             this.user = gameUser.user;
         }
     }
