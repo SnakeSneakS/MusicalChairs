@@ -56,7 +56,10 @@ public class JsonHandler {
             else if(jsonClass.equals(SocketModel.GameStartReq.class.getName())){
                 SocketModel.GameStartReq gameStartReq = mapper.readValue(json, SocketModel.GameStartReq.class);
                 handleGameStartReq(gameStartReq);
-            }
+            }else if(jsonClass.equals(SocketModel.SitDownReq.class.getName())){
+                SocketModel.SitDownReq sitDownReq = mapper.readValue(json, SocketModel.SitDownReq.class);
+                handleSitDownReq(sitDownReq);
+            }   
             else{
                 System.err.printf("Unhandling class: %s\n", jsonClass);
             }
@@ -67,16 +70,19 @@ public class JsonHandler {
 
     //Handle Request Data Functions
     public void handleTestReq(SocketModel.TestReq testReq){
-        System.out.printf("handle data: %s\n", testReq );
+        //System.out.printf("handle data: %s\n", testReq );
     }
     public void handleMatchStartReq(SocketModel.MatchStartReq matchStartReq){
-        System.out.printf("handle data: %s\n", matchStartReq ); 
+        //System.out.printf("handle data: %s\n", matchStartReq ); 
     }
     public void handleMoveReq(SocketModel.MoveReq moveReq){
-        System.out.printf("handle data: %s\n", moveReq ); 
+        //System.out.printf("handle data: %s\n", moveReq ); 
     }
     public void handleGameStartReq(SocketModel.GameStartReq gameStartReq){
-        System.out.printf("handle data: %s\n", gameStartReq ); 
+        //System.out.printf("handle data: %s\n", gameStartReq ); 
+    }
+    public void handleSitDownReq(SocketModel.SitDownReq sitDownReq){
+        System.out.printf("handle data: %s\n", sitDownReq); 
     }
 }
 

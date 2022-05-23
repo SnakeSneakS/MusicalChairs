@@ -6,6 +6,7 @@ import java.util.List;
 import Common.Model.SocketModel.GameEndRes;
 import Common.Model.SocketModel.MoveReq;
 import Common.Model.SocketModel.RoundEndRes;
+import Common.Model.SocketModel.SitDownReq;
 import Server.Room.Room;
 import Server.Room.User.GameUser;
 
@@ -73,5 +74,9 @@ public class RoundManager extends Thread {
 
     public void handleMoveReq(MoveReq moveReq, int userID){
         if(this.round!=null) round.handleMoveReq(moveReq, userID);
+    }
+
+    public void handleSitDownReq(SitDownReq sitDownReq, int userID){
+        if(this.round!=null) round.handleSitDownReq(sitDownReq, userID);
     }
 }

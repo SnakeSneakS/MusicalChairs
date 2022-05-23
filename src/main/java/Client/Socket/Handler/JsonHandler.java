@@ -94,28 +94,28 @@ public class JsonHandler {
     }
     */
     public void handleMatchStartRes(SocketModel.MatchStartRes matchStartRes){
-        System.out.printf("handle data: %s\n", matchStartRes ); 
+        //System.out.printf("handle data: %s\n", matchStartRes ); 
     }
     public void handleMoveRes(SocketModel.MoveRes moveRes){
-        System.out.printf("handle data: %s\n", moveRes ); 
+        //System.out.printf("handle data: %s\n", moveRes ); 
     }
     public void handleGameStartRes(SocketModel.GameStartRes gameStartRes){
-        System.out.printf("handle data: %s\n", gameStartRes ); 
+        //System.out.printf("handle data: %s\n", gameStartRes ); 
     }
     public void handleRoomUsersInfoRes(SocketModel.RoomUsersInfoRes roomUsersInfoRes){
-        System.out.printf("handle data: %s\n", roomUsersInfoRes ); 
+        //System.out.printf("handle data: %s\n", roomUsersInfoRes ); 
     }
     public void handleDamagedRes(SocketModel.DamagedRes damagedRes){
-        System.out.printf("handle data: %s\n", damagedRes ); 
+        //System.out.printf("handle data: %s\n", damagedRes ); 
     }
     public void handleGameEndRes(SocketModel.GameEndRes gameEndRes){
-        System.out.printf("handle data: %s\n", gameEndRes ); 
+        //System.out.printf("handle data: %s\n", gameEndRes ); 
     }
     public void handleRoundEndRes(SocketModel.RoundEndRes roundEndRes){
-        System.out.printf("handle data: %s\n", roundEndRes ); 
+        //System.out.printf("handle data: %s\n", roundEndRes ); 
     }
     public void handlePlayMusicRes(SocketModel.PlayMusicRes playMusicRes){
-        System.out.printf("handle data: %s\n", playMusicRes ); 
+        //System.out.printf("handle data: %s\n", playMusicRes ); 
     }
 }
 

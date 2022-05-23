@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
 import Client.GameObjectController;
+import Client.GameObject.Player;
 
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ import Common.Model.SocketModel.MoveReq;
 import Common.Model.SocketModel.MoveRes;
 import Common.Model.SocketModel.DamagedRes;
 import Common.Model.SocketModel.PlayMusicRes;
+import Common.Model.SocketModel.SitDownReq;
 import Server.Room.Room;
 import Server.Room.User.GameUser;
 import Client.GameFrame;
@@ -28,7 +30,15 @@ public class Round extends Thread {
     private Room room;
     private Map<Integer, RoundUser> roundUsers; //roundで生きているユーザー達 
     private List<Integer> roomSurvivedUserIDs;  //roundで生き残ったユーザー達 
-    private List<Position> chairs;
+    private List<RoundChairs> chairs;
+
+    public class RoundChairs{
+        public Position position;
+        boolean cannotSit;
+        public RoundChairs(){
+            cannotSit = false;
+        }
+    }
 
     boolean isEnd=false;
 
@@ -38,7 +48,7 @@ public class Round extends Thread {
     private int initialRoundUsers = 0;
     private boolean canSit=false;
 
-    
+
 
     public Round(Room room, List<Integer> survivedUserIDs){
         this.room = room;
@@ -52,15 +62,15 @@ public class Round extends Thread {
             
             // 椅子を配置。人数より１少ない
         for(int i=0;i<survivedUserIDs.size() - 1; i++){
-            chairs.add(new Position());
+            chairs.add(new RoundChairs());
         }
         if(survivedUserIDs.size() ==2){
-            chairs.get(0).setPosition( GameFrame.width/2, GameFrame.height/2 );
+            chairs.get(0).position.setPosition( GameFrame.width/2, GameFrame.height/2 );
         }else{
             double theta = 2*Math.PI/chairs.size();
             double r = (GameObjectController.chairRadius + GameObjectController.margin)/Math.sin(theta/2);
             for (int i = 0; i < chairs.size(); i++) {
-                chairs.get(i).setPosition((int)Math.round(GameFrame.width/2 + r*Math.sin(theta * i)), (int)Math.round(GameFrame.height/2 - r*Math.cos(theta * i)));
+                chairs.get(i).position.setPosition((int)Math.round(GameFrame.width/2 + r*Math.sin(theta * i)), (int)Math.round(GameFrame.height/2 - r*Math.cos(theta * i)));
             }
         }
     }
@@ -74,8 +84,8 @@ public class Round extends Thread {
                 @Override
                 public void run() {
                     while(!isEnd){
-                        for(RoundUser Member : roundUsers.values()){
-                            CollisionDetection(Member);
+                        for(Integer myID : roundUsers.keySet()){
+                            CollisionDetection(roundUsers.get(myID));
                         }
                         PlayerDistance();
                         //TODO: ダメージを受けるかどうかみて、ダメージを受けた場合、減ったHPと対象のUserIDに対して「
@@ -87,11 +97,18 @@ public class Round extends Thread {
             }.start();
 
             this.canSit=false;
+            for(Integer myID : roundUsers.keySet()){
+                roundUsers.get(myID).isdamaged = true; 
+            }
+            sleep(4000);;
+            for(Integer myID : roundUsers.keySet()){
+                roundUsers.get(myID).isdamaged = false; 
+            }
             room.Publish(new PlayMusicRes(true)); 
 
-            Random random = new Random();
+            Random random = new Random(); 
 
-            sleep(random.nextInt(20000) + 7000 );
+            sleep(random.nextInt(20000) + 12000 );
             room.Publish(new PlayMusicRes(false));
             this.canSit=true;
             for(int i=0;i<6;i++){
@@ -116,33 +133,59 @@ public class Round extends Thread {
         }
     }
 
-
     public void CollisionDetection(RoundUser user){
+        if(user.isdamaged == true) return;
         double getdistance;
         for(int i = 0; i < chairs.size(); i++){
-            double x2 = user.position.x - chairs.get(i).x;
-            double y2 = user.position.y - chairs.get(i).y;
+            double x2 = user.position.x - chairs.get(i).position.x;
+            double y2 = user.position.y - chairs.get(i).position.y;
             getdistance = Math.sqrt(x2*x2+y2*y2);
             //椅子との当たり判定    
             if (getdistance <= GameObjectController.chairRadius + GameObjectController.playerRadius){
-                 //HP下げる？？
-                user.HP -= 1;
+                //HP下げる？？
+                //2秒ごとに発動
+                if(user.HP > 0) user.HP -= 10;
                 room.Publish(new DamagedRes(user.user.UserID, user.HP));
-            }
+                user.isdamaged = true;
+                new Thread(){
+                    @Override
+                    public void run() {
+                        try{
+                            Thread.sleep(2000); // 2秒間だけ処理を止める
+                            user.isdamaged = false;
+                        }catch(Exception e){
+                        }
+                    }
+                }.start();
+            }    
         }
+        
     }
      //プレイヤー同士の当たり判定
     public void PlayerDistance(){
         for(Integer myID : roundUsers.keySet()){
+            if(roundUsers.get(myID).isdamaged == true) continue; 
             for(Integer otherID : roundUsers.keySet()){
                 if(myID != otherID){
                     double x3 =roundUsers.get(myID).position.x  - roundUsers.get(otherID).position.x;
                     double y3 = roundUsers.get(myID).position.y - roundUsers.get(otherID).position.y;
                     double getdistance = Math.sqrt(x3*x3+y3*y3);
                     if(getdistance <= 2*GameObjectController.playerRadius){
-                         //HP下げる？？
-                        roundUsers.get(myID).HP -= 1;
+                        //HP下げる？？
+                        //2秒ごとに発動
+                        if(roundUsers.get(myID).HP > 0) roundUsers.get(myID).HP -= 10;
                         room.Publish(new DamagedRes(myID, roundUsers.get(myID).HP));
+                        roundUsers.get(myID).isdamaged = true;
+                        new Thread(){
+                            @Override
+                            public void run() {
+                                try{
+                                    Thread.sleep(2000); // 2秒間だけ処理を止める
+                                    roundUsers.get(myID).isdamaged = false;
+                                }catch(Exception e){
+                                }
+                            }
+                        }.start();                        
                     }
                 }
 
@@ -150,26 +193,41 @@ public class Round extends Thread {
         }
     }
 
-   public synchronized void handleMoveReq(MoveReq moveReq, int userID){
-        // TODO: MoveReqの時の処理を記述する。
-        // TODO: 当たり判定を実装するなら当たり判定とか? ダメージを受ける場合はroom.PublishでDamagedResを送信する。(下のMoveResを参照) 
+    // TODO: MoveReqの時の処理を記述する。
+    // TODO: 当たり判定を実装するなら当たり判定とか? ダメージを受ける場合はroom.PublishでDamagedResを送信する。(下のMoveResを参照) 
+    //移動リクエストを受け取った時に実行される。
+    public synchronized void handleMoveReq(MoveReq moveReq, int userID){
+        // TODO: 当たり判定を実装するなら当たり判定とか? ダメージを受ける場合はroom.PublishでDamagedResを送信する。56行目付近
         roundUsers.get(userID).position.MoveTo( moveReq.x, moveReq.y ); 
         MoveRes moveRes = new MoveRes(userID, moveReq.x, moveReq.y);
         room.Publish( moveRes );
-        //メソッドを使用する
-        /* 当たり判定(ユークリッド距離) */
-      
 
-        // room.Publish(new DamagedRes(UserID, HP));
+    }
+    
+    //椅子に座るかどうかを判定する
+    //クリックを押した時に実行される。
+    public synchronized void handleSitDownReq(SitDownReq sitDownReq, int userID){
+        if(roundUsers.containsKey(userID)){
+            System.out.printf("SitDownReq: {userID: %d, position: %s}\n", userID, roundUsers.get(userID).position);
 
-        //TODO: 座るかどうか判定し、座る場合、SitDown(userIDを実行する) 
-        //とりあえず(350)との距離が30以下ならば座るようにしているが、「椅子に座る」ように修正が必要。
-        if(canSit && new Position(350,350).Distance(new Position(moveReq.x, moveReq.y))<100){
-            Boolean isSitDown = SitDown(userID);
-            if(isSitDown){
-                System.out.printf("座るのに成功した: UserID=%d\n", userID);
-            }else{
-                System.out.printf("座るのに失敗した: UserID=%d\n", userID);
+            //例えばこんな感じ? 本当は椅子とのあれこれをしたい。
+            //座れたかどうかを判定
+            //メソッドを使用する
+            /* 当たり判定(ユークリッド距離) */
+            // room.Publish(new DamagedRes(UserID, HP));
+            for(int i = 0; i < chairs.size(); i++){
+                if(chairs.get(i).cannotSit == true) continue;
+                double chairSumDistance = GameObjectController.chairRadius + GameObjectController.playerRadius;
+                double chairdistance = new Position(chairs.get(i).position.x, chairs.get(i).position.y).Distance(new Position(roundUsers.get(userID).position.x, roundUsers.get(userID).position.y));
+                if(canSit && chairdistance<chairSumDistance){
+                    Boolean isSitDown = SitDown(userID);
+                    if(isSitDown){
+                        System.out.printf("座るのに成功した: UserID=%d\n", userID);
+                        chairs.get(i).cannotSit = true;
+                    }else{
+                        System.out.printf("座るのに失敗した or 既に座っている: UserID=%d\n", userID);
+                    }
+                }
             }
         }
     }
@@ -180,13 +238,15 @@ public class Round extends Thread {
 
     public class RoundUser{
         public boolean survived = false; 
+        public boolean isdamaged = false;
         public User user;
         public Position position;
         public Integer HP;
 
-        public RoundUser(GameUser gameUsers){
-            this.position=new Position(0, 0);
+        public RoundUser(GameUser gameUser){
+            this.position = new Position(0, 0);
             this.HP = 100; 
+            this.user = gameUser.user;
         }
     }
 }

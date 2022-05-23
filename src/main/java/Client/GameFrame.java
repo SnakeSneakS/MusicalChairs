@@ -34,6 +34,7 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.DataLine;
+import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
@@ -59,7 +60,7 @@ public class GameFrame extends JFrame {
 
     final Client client;
 
-    Clip clip = createClip(new File("resources/futta-dream.wav"));
+    Clip clip = createClip(new File("resources/futta-festa.wav"));
 
     GameFrame () {
         // 詳細は https://www.javadrive.jp/tutorial/jframe/
@@ -117,8 +118,8 @@ public class GameFrame extends JFrame {
                 public void handleMoveRes(MoveRes moveRes) {
                     //TODO 移動した時のレスポンス 
                     Player player = goc.getPlayer(moveRes.UserID);
-                    if(player!=null && moveRes.UserID!=myID) player.setPosition(moveRes.position.x, moveRes.position.y); 
-                    System.out.printf("handleMoveRes: UserID=%s, Position=%s\n", moveRes.UserID, moveRes.position);
+                    if(player!=null && moveRes.UserID!=myID) player.setPosition(moveRes.position.x- getInsets().left, moveRes.position.y-getInsets().top); 
+                    //System.out.printf("handleMoveRes: UserID=%s, Position=%s\n", moveRes.UserID, moveRes.position);
                 }
                 //他のユーザーが減ったor増えた時に受信するメッセージ
                 @Override 
@@ -138,7 +139,7 @@ public class GameFrame extends JFrame {
                     System.out.printf("handleDamagedRes: UserID=%s, HP=%s\n", damagedRes.UserID, damagedRes.HP);
                 }
                 @Override
-                public void handleRoundEndRes(RoundEndRes roundEndRes) {
+                public synchronized void handleRoundEndRes(RoundEndRes roundEndRes) {
                     JFrame jFrame = new JFrame();
 
                     for(int j=0; j<goc.players.size();j++){
@@ -158,7 +159,7 @@ public class GameFrame extends JFrame {
                     // System.out.printf("]\n");
                 }
                 @Override
-                public void handleGameEndRes(GameEndRes gameEndRes) {
+                public synchronized void handleGameEndRes(GameEndRes gameEndRes) {
                     JFrame jFrame = new JFrame();
                     if(goc.players.size()==1){
                         JOptionPane.showMessageDialog(jFrame, "Game END!! Winner is:"+goc.players.get(0).name);
@@ -166,13 +167,14 @@ public class GameFrame extends JFrame {
                     else{
                         JOptionPane.showMessageDialog(jFrame, "Game END!! No Winner");
                     }
-
                 }
              
                 @Override
                 public void handlePlayMusicRes(PlayMusicRes playMusicRes) {
                     if(playMusicRes.isPlay==true){
                         clip.start();
+                        FloatControl ctrl = (FloatControl)clip.getControl(FloatControl.Type.MASTER_GAIN);
+                        ctrl.setValue((float)Math.log10((float)0.6 / 20)*20);
                     }
                     else{
                         System.out.println("stopped");

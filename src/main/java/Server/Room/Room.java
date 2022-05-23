@@ -11,13 +11,14 @@ import Common.Model.SocketModel.GameStartReq;
 import Common.Model.SocketModel.GameStartRes; 
 import Common.Model.SocketModel.MatchStartRes; 
 import Common.Model.SocketModel.MoveReq; 
-import Common.Model.SocketModel.RoomUsersInfoRes; 
+import Common.Model.SocketModel.RoomUsersInfoRes;
+import Common.Model.SocketModel.SitDownReq;
 import Common.Model.SocketModel.UserInfo; 
 
 //人を集めてゲームを開始するまでを扱う。 
 public class Room {
     public static final int minUserNum = 2; 
-    public static final int maxUserNum = 3;
+    public static final int maxUserNum = 5;
 
     private RoundManager roundManager=null; //roundGameを司る。
 
@@ -130,5 +131,8 @@ public class Room {
         if(this.roundManager!=null) roundManager.handleMoveReq(moveReq, userID);
     }
 
+    public synchronized void room_handleSitDownReq(SitDownReq sitDownReq, int userID){
+        if(this.roundManager!=null) roundManager.handleSitDownReq(sitDownReq, userID);
+    }
 
 }
