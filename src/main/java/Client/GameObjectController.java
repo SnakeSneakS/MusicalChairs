@@ -33,40 +33,44 @@ public class GameObjectController {
         gf.gr2.setStroke(new BasicStroke(lineWidth));
     }
 
-    Player addPlayer (String name, int ID) {
+    synchronized Player addPlayer (String name, int ID) {
         numberOfPlayers++;
         Player p = new Player(name, ID, playerRadius, gf.gr2);
         players.add(p);
 
         // 椅子を配置。人数より１少ない
-        if (numberOfPlayers > 1) chairs.add(new Chair(chairRadius));
-        if(numberOfPlayers==2){
-            chairs.get(0).setPosition( gf.width/2, gf.height/2 );
-        }else{
-            double theta = 2*Math.PI/chairs.size();
-            double r = (chairRadius + margin)/Math.sin(theta/2);
-            for (int i = 0; i < chairs.size(); i++) {
-                chairs.get(i).setPosition((int)Math.round(gf.width/2 + r*Math.sin(theta * i)), (int)Math.round(gf.height/2 - r*Math.cos(theta * i)));
+        if (numberOfPlayers > 1){
+            chairs.add(new Chair(chairRadius));
+            if(numberOfPlayers==2){
+                chairs.get(0).setPosition( gf.width/2, gf.height/2 );
+            }else{
+                double theta = 2*Math.PI/chairs.size();
+                double r = (chairRadius + margin)/Math.sin(theta/2);
+                for (int i = 0; i < chairs.size(); i++) {
+                    chairs.get(i).setPosition((int)Math.round(gf.width/2 + r*Math.sin(theta * i)), (int)Math.round(gf.height/2 - r*Math.cos(theta * i)));
+                }
             }
         }
         
         return p;
     }
 
-    void deletePlayer (int ID){
+    synchronized void deletePlayer (int ID){
         for(int i = 0 ; i<players.size(); i++){
             if(players.get(i).ID==ID) players.remove(i);
         }
         numberOfPlayers--;
 
         chairs.remove(0);
-        if(numberOfPlayers==2){
-            chairs.get(0).setPosition( gf.width/2, gf.height/2 );
-        }else{
-            double theta = 2*Math.PI/chairs.size();
-            double r = (chairRadius + margin)/Math.sin(theta/2);
-            for (int i = 0; i < chairs.size(); i++) {
-                chairs.get(i).setPosition((int)Math.round(gf.width/2 + r*Math.sin(theta * i)), (int)Math.round(gf.height/2 - r*Math.cos(theta * i)));
+        if(numberOfPlayers > 1){
+            if(numberOfPlayers==2){
+                chairs.get(0).setPosition( gf.width/2, gf.height/2 );
+            }else{
+                double theta = 2*Math.PI/chairs.size();
+                double r = (chairRadius + margin)/Math.sin(theta/2);
+                for (int i = 0; i < chairs.size(); i++) {
+                    chairs.get(i).setPosition((int)Math.round(gf.width/2 + r*Math.sin(theta * i)), (int)Math.round(gf.height/2 - r*Math.cos(theta * i)));
+                }
             }
         }
     }

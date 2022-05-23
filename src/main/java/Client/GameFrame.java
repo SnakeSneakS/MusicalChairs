@@ -28,7 +28,8 @@ import Common.Model.SocketModel.RoundEndRes;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
- 
+import java.util.ArrayList;
+
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -153,18 +154,23 @@ public class GameFrame extends JFrame {
                         }
                         if(!isSurvived){
                             goc.deletePlayer(checkID);
+                            j--;
                             if(checkID==myID) JOptionPane.showMessageDialog(jFrame, "I'm loser");
                         }
                     }
-                    // System.out.printf("]\n");
+                    
+                    System.out.printf("Survived Player res: %d\n", roundEndRes.UserIDs.length);
+                    System.out.printf("Survived Player goc: %d\n", goc.players.size());
+                    for(Player p: goc.players){
+                        System.out.println(p);
+                    }
                 }
                 @Override
                 public synchronized void handleGameEndRes(GameEndRes gameEndRes) {
                     JFrame jFrame = new JFrame();
                     if(goc.players.size()==1){
                         JOptionPane.showMessageDialog(jFrame, "Game END!! Winner is:"+goc.players.get(0).name);
-                    }
-                    else{
+                    }else{
                         JOptionPane.showMessageDialog(jFrame, "Game END!! No Winner");
                     }
                 }
@@ -264,7 +270,7 @@ public class GameFrame extends JFrame {
     } 
         
 
-    private void addPlayer(String username, int id){
+    private synchronized void addPlayer(String username, int id){
         if(goc.getPlayer(id)!=null){
             return;
         }else{

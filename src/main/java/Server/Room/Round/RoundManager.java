@@ -39,20 +39,21 @@ public class RoundManager extends Thread {
                     round.join(); //roundが終わるのを待つ
 
                     this.survivedUserIDs = round.getSurvivedUserIDs();
-                    if(this.survivedUserIDs.size() < 2){
-                        end();
-                    }
                     
+                    int[] ids=this.survivedUserIDs.stream().mapToInt(Integer::intValue).toArray() ;
                     room.Publish( 
-                        new RoundEndRes( 
-                            this.survivedUserIDs.stream().mapToInt(Integer::intValue).toArray() 
-                        ) 
+                        new RoundEndRes(ids) 
                     ); 
+                    //for(int i: ids){ System.out.printf("survived user: %d\n", i); }
+
+                    if(this.survivedUserIDs.size() < 2){
+                        break;
+                    }
                 }catch(Exception e){
-                    end();
+                    System.err.println(e);
                 }
             }catch(Exception e){
-                
+                System.err.println(e);
             }
             
         }

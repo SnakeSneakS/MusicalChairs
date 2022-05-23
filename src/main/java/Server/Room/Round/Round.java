@@ -36,6 +36,7 @@ public class Round extends Thread {
         public Position position;
         boolean cannotSit;
         public RoundChairs(){
+            position = new Position();
             cannotSit = false;
         }
     }
@@ -84,14 +85,13 @@ public class Round extends Thread {
                 @Override
                 public void run() {
                     while(!isEnd){
-                        for(Integer myID : roundUsers.keySet()){
-                            CollisionDetection(roundUsers.get(myID));
+                        //椅子に座ることができない間、当たり判定をとりダメージを減らす． 
+                        if(!canSit){
+                            for(Integer myID : roundUsers.keySet()){
+                                CollisionDetection(roundUsers.get(myID));
+                            }
+                            PlayerDistance();
                         }
-                        PlayerDistance();
-                        //TODO: ダメージを受けるかどうかみて、ダメージを受けた場合、減ったHPと対象のUserIDに対して「
-                            // room.Publish(new DamagedRes(UserID, HP))
-                        //」を実行する;
-                        // room.Publish(new DamegedRes(UserID, HP));
                     }
                 }
             }.start();
@@ -209,6 +209,11 @@ public class Round extends Thread {
     public synchronized void handleSitDownReq(SitDownReq sitDownReq, int userID){
         if(roundUsers.containsKey(userID)){
             System.out.printf("SitDownReq: {userID: %d, position: %s}\n", userID, roundUsers.get(userID).position);
+
+            //ユーザーが生きているか判定
+            if(roundUsers.get(userID).HP<=0){
+                return;
+            }
 
             //例えばこんな感じ? 本当は椅子とのあれこれをしたい。
             //座れたかどうかを判定
