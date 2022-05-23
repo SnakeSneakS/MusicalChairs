@@ -35,7 +35,7 @@ public class Input extends MouseAdapter {
                         sleep(1000/gf.fps);
                     }
                 }catch(Exception e){
-                    System.err.println(e);
+                    e.printStackTrace();
                 }
             }
         };

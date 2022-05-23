@@ -7,6 +7,13 @@ import java.awt.Graphics2D;
 
 // プレイヤー
 public class Player extends GameObject {
+
+    public static enum Mode{
+        DEFAULT,
+        CANSIT,
+        ALREADYSIT,
+    }
+
     private static final Color nameColor = Color.white;
     private static final Color HPColor = Color.black;
 
@@ -19,6 +26,8 @@ public class Player extends GameObject {
     private Graphics2D gr2;
     private Font nameFont;
     private Font HPFont;
+
+    private Mode mode=Mode.DEFAULT;
 
     public Player (String name, int ID, int playerRadius, Graphics2D gr2) {
         super(0, 0, 2*playerRadius, 2*playerRadius, true);
@@ -54,6 +63,28 @@ public class Player extends GameObject {
         fm = g.getFontMetrics(); // 二回取得しないとおかしくなる。Font が変わるためと思われる
         Rectangle nameRect = fm.getStringBounds(String.valueOf(name), gr2).getBounds();
         g.drawString(name, x - nameRect.width/2, y - playerRadius - fm.getDescent());
+
+        switch(mode){
+            case DEFAULT:
+                //g.setColor(Color.white);
+                //g.drawOval(x - width/2, y - width/2, width, height);
+                break;
+            case CANSIT:
+                g.setColor(Color.yellow);
+                g.drawOval(x - width/2, y - width/2, width, height);
+                break;
+            case ALREADYSIT:
+                g.setColor(Color.green);
+                g.drawOval(x - width/2, y - width/2, width, height);
+                break;
+            default:
+                break;
+        }
+    }
+
+    //modeを設定する
+    public void SetMode(Mode mode){
+        this.mode = mode;
     }
 
     // ID からユニークな色を返す

@@ -73,6 +73,16 @@ public class SocketModel {
     public static class SitDownReq extends Req{
         public SitDownReq(){}
     }  
+    //座るのに成功した時に流れる
+    public static class SitDownRes extends Res{
+        public int UserID;
+        public int ChairID;
+        public SitDownRes(){}
+        public SitDownRes(int UserID, int ChairID){
+            this.UserID=UserID;
+            this.ChairID=ChairID;
+        }
+    }  
 
     //移動
     public static class MoveReq extends Req{

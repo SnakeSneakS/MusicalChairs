@@ -25,7 +25,7 @@ public class JsonHandler {
             String json = mapper.writeValueAsString(obj);
             return json;
         }catch(Exception e){
-            System.err.println(e);
+            e.printStackTrace();
             return "";
         }
     }
@@ -79,11 +79,15 @@ public class JsonHandler {
                 SocketModel.PlayMusicRes playMusicRes = mapper.readValue(json, SocketModel.PlayMusicRes.class);
                 handlePlayMusicRes(playMusicRes);
             }
+            else if(jsonClass.equals(SocketModel.SitDownRes.class.getName())){
+                SocketModel.SitDownRes sitDownRes = mapper.readValue(json, SocketModel.SitDownRes.class);
+                handleSitDownRes(sitDownRes);
+            }
             else{
                 System.err.printf("Unhandling class: %s\n", jsonClass);
             }
         }catch(Exception e){
-            System.err.println(e);
+            e.printStackTrace();
         }
     }
 
@@ -116,6 +120,9 @@ public class JsonHandler {
     }
     public void handlePlayMusicRes(SocketModel.PlayMusicRes playMusicRes){
         //System.out.printf("handle data: %s\n", playMusicRes ); 
+    }
+    public void handleSitDownRes(SocketModel.SitDownRes sitDownRes){
+        //System.out.printf("handle data: %s\n", sitDownRes ); 
     }
 }
 

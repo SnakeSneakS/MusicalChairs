@@ -17,6 +17,7 @@ import Common.Model.SocketModel.MoveRes;
 import Common.Model.SocketModel.DamagedRes;
 import Common.Model.SocketModel.PlayMusicRes;
 import Common.Model.SocketModel.SitDownReq;
+import Common.Model.SocketModel.SitDownRes;
 import Server.Room.Room;
 import Server.Room.User.GameUser;
 import Client.GameFrame;
@@ -116,7 +117,7 @@ public class Round extends Thread {
                 sleep(1000);
             }
         }catch(Exception e){
-            System.err.println(e);
+            e.printStackTrace();
         }
     }
 
@@ -124,9 +125,14 @@ public class Round extends Thread {
         return this.roomSurvivedUserIDs;
     }
 
-    private synchronized boolean SitDown(int userID){
+    private synchronized boolean SitDown(int userID, int chairID){
         if( roundUsers.containsKey(userID) && roomSurvivedUserIDs.size()<(initialRoundUsers-1) ){
-            if(!roomSurvivedUserIDs.contains(userID)) roomSurvivedUserIDs.add(userID); 
+            if(!roomSurvivedUserIDs.contains(userID)){
+                roomSurvivedUserIDs.add(userID); 
+                room.Publish(
+                    new SitDownRes(userID, chairID)
+                );
+            }
             return true; //座るのに成功
         }else{
             return false; //座るのに失敗 
@@ -154,6 +160,7 @@ public class Round extends Thread {
                             Thread.sleep(2000); // 2秒間だけ処理を止める
                             user.isdamaged = false;
                         }catch(Exception e){
+                            e.printStackTrace();
                         }
                     }
                 }.start();
@@ -183,6 +190,7 @@ public class Round extends Thread {
                                     Thread.sleep(2000); // 2秒間だけ処理を止める
                                     roundUsers.get(myID).isdamaged = false;
                                 }catch(Exception e){
+                                    e.printStackTrace();
                                 }
                             }
                         }.start();                        
@@ -225,7 +233,7 @@ public class Round extends Thread {
                 double chairSumDistance = GameObjectController.chairRadius + GameObjectController.playerRadius;
                 double chairdistance = new Position(chairs.get(i).position.x, chairs.get(i).position.y).Distance(new Position(roundUsers.get(userID).position.x, roundUsers.get(userID).position.y));
                 if(canSit && chairdistance<chairSumDistance){
-                    Boolean isSitDown = SitDown(userID);
+                    Boolean isSitDown = SitDown(userID, i);
                     if(isSitDown){
                         System.out.printf("座るのに成功した: UserID=%d\n", userID);
                         chairs.get(i).cannotSit = true;

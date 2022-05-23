@@ -16,7 +16,7 @@ public class ServerClient implements Runnable {
         try {
             Server.main(port);
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 }

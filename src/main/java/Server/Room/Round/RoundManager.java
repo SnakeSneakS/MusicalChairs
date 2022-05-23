@@ -45,22 +45,22 @@ public class RoundManager extends Thread {
                         new RoundEndRes(ids) 
                     ); 
                     //for(int i: ids){ System.out.printf("survived user: %d\n", i); }
-
                     if(this.survivedUserIDs.size() < 2){
+                        end();
                         break;
                     }
                 }catch(Exception e){
-                    System.err.println(e);
+                    e.printStackTrace();
                 }
             }catch(Exception e){
-                System.err.println(e);
+                e.printStackTrace();
             }
-            
         }
         end();
     }
 
     public void end(){
+        if(!isPlaying) return;
         if(round!=null) round.End();
 
         this.isPlaying=false;

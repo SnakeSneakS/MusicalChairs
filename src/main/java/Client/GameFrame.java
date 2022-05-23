@@ -7,10 +7,13 @@ package Client;
 
 import javax.swing.*;
 
+import com.fasterxml.jackson.annotation.JsonCreator.Mode;
+
 import java.awt.*;
 import java.awt.image.*;
 import java.awt.Color; // https://www.javadrive.jp/tutorial/color/
 
+import Client.GameObject.Chair;
 import Client.GameObject.Player;
 import Client.Socket.Client;
 import Client.Socket.Handler.JsonHandler;
@@ -24,6 +27,7 @@ import Common.Model.SocketModel.MoveRes;
 import Common.Model.SocketModel.PlayMusicRes;
 import Common.Model.SocketModel.RoomUsersInfoRes;
 import Common.Model.SocketModel.RoundEndRes;
+import Common.Model.SocketModel.SitDownRes;
 
 import java.io.File;
 import java.io.IOException;
@@ -144,6 +148,7 @@ public class GameFrame extends JFrame {
                     JFrame jFrame = new JFrame();
 
                     for(int j=0; j<goc.players.size();j++){
+                        //if(goc.players.size()==0) break;
                         int checkID=goc.players.get(j).ID;
                         boolean isSurvived=false;
                         for(int i=0;i<roundEndRes.UserIDs.length;i++){
@@ -158,12 +163,9 @@ public class GameFrame extends JFrame {
                             if(checkID==myID) JOptionPane.showMessageDialog(jFrame, "I'm loser");
                         }
                     }
-                    
-                    System.out.printf("Survived Player res: %d\n", roundEndRes.UserIDs.length);
-                    System.out.printf("Survived Player goc: %d\n", goc.players.size());
-                    for(Player p: goc.players){
-                        System.out.println(p);
-                    }
+
+                    goc.setAllChairMode(Chair.Mode.DEFAULT);
+                    goc.setAllPlayerMode(Player.Mode.DEFAULT);
                 }
                 @Override
                 public synchronized void handleGameEndRes(GameEndRes gameEndRes) {
@@ -185,8 +187,19 @@ public class GameFrame extends JFrame {
                     else{
                         System.out.println("stopped");
                         clip.stop();
+                        
+                        goc.setAllChairMode(Chair.Mode.CANSIT);
+                        goc.setAllPlayerMode(Player.Mode.CANSIT);
                     }
                     // System.out.printf("play music? %s\n", playMusicRes.isPlay);
+                }
+
+                @Override
+                public void handleSitDownRes(SitDownRes sitDownRes){
+                    System.out.printf("User Sitdown: userID(%d) chirID(%d)", sitDownRes.UserID, sitDownRes.ChairID);
+                    
+                    goc.setChairMode(sitDownRes.ChairID, Chair.Mode.ALREADYSIT);
+                    goc.setPlayerMode(sitDownRes.UserID, Player.Mode.ALREADYSIT);
                 }
             };
 
@@ -345,6 +358,8 @@ public class GameFrame extends JFrame {
             System.exit(1);
         }
     }
+
+    
        
 
     public static void main (String[] args) {
@@ -367,7 +382,7 @@ public class GameFrame extends JFrame {
                 t[i].join();
             }
         }catch(Exception e){
-            System.err.println(e);
+            e.printStackTrace();
         }finally{
             System.out.println("Execution end.");
         }

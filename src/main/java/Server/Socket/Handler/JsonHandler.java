@@ -25,7 +25,7 @@ public class JsonHandler {
             String json = mapper.writeValueAsString(obj);
             return json;
         }catch(Exception e){
-            System.err.println(e);
+            e.printStackTrace();
             return "";
         }
     }
@@ -64,7 +64,7 @@ public class JsonHandler {
                 System.err.printf("Unhandling class: %s\n", jsonClass);
             }
         }catch(Exception e){
-            System.err.println(e);
+            e.printStackTrace();
         }
     }
 

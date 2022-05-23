@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.awt.*;
 
 import Client.GameObject.Player;
+import Client.GameObject.Chair.Mode;
 import Client.GameObject.Chair;
 
 
@@ -61,7 +62,7 @@ public class GameObjectController {
         }
         numberOfPlayers--;
 
-        chairs.remove(0);
+        if(chairs.size()>0) chairs.remove(0);
         if(numberOfPlayers > 1){
             if(numberOfPlayers==2){
                 chairs.get(0).setPosition( gf.width/2, gf.height/2 );
@@ -75,6 +76,34 @@ public class GameObjectController {
         }
     }
 
+    void setChairMode(int chairID, Chair.Mode mode){
+        try{
+            Chair chair = chairs.get(chairID);
+            chair.SetMode(mode);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+    void setAllChairMode(Chair.Mode mode){
+        for(Chair c: chairs){
+            c.SetMode(mode);
+        }
+    }
+
+    void setPlayerMode(int playerID, Player.Mode mode){
+        for(Player p: players){
+            if(p.ID==playerID){
+                p.SetMode(mode);
+                return;
+            }
+        }
+    }
+    void setAllPlayerMode(Player.Mode mode){
+        for(Player p: players){
+            p.SetMode(mode);
+        }
+    }
+
     // ID でプレイヤーを返す。見つからなければ null を返す
     Player getPlayer (int ID) {
         for (int i = 0; i < players.size(); i++) {
@@ -85,6 +114,7 @@ public class GameObjectController {
     }
 
     // 全オブジェクトを描画
+    // 後に描画したものが上に描かれる
     void paint (Graphics g) {
         for (int i = 0; i < players.size(); i++) {
             players.get(i).paint(g);

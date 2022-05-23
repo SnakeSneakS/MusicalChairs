@@ -30,12 +30,12 @@ public class ServerSocketManager {
                         handler.Handle();
                     }
                 }catch(Exception e){
-                    System.err.println(e);
+                    e.printStackTrace();
                 }finally{
                     try{
                         if(serverSocket!=null) serverSocket.close();
                     }catch(Exception e){
-                        System.err.println(e);
+                        e.printStackTrace();
                     }
                 }
             }

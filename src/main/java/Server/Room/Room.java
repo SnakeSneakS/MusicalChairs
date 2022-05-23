@@ -52,7 +52,7 @@ public class Room {
             try{
                 user.socket.Send(resJson);
             }catch(Exception e){
-                System.err.println(e);
+                e.printStackTrace();
             }
 
             //ユーザーが増えたことを知らせる
@@ -93,7 +93,7 @@ public class Room {
             String json = user.jsonHandler.ToJson(sendObj);
             user.socket.Send(json);
         }catch(Exception e){
-            System.err.println(e);
+            e.printStackTrace();
         }
     }
 
