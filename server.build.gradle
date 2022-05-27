@@ -1,10 +1,30 @@
+//Serverのみ動かすbuild setting
+
 plugins{
     id 'java'
     id 'application'
 }
 
+jar {
+    manifest {
+        attributes 'Main-Class': "Server.Server"
+    }
+    dependencies{
+        //Jackson: json  <=> class object 
+        implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.13.2'
+        implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.2.2'
+        implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.13.2'
+
+        //testImplementation 'org.junit.jupiter:junit-jupiter:5.5.2'
+    }
+}
+
 application{
     mainClass = "Server.Server" //Client.GameFrame //Server.Server //ServerClient
+}
+
+compileJava {
+    options.encoding = 'UTF-8'
 }
 
 repositories {
@@ -17,6 +37,6 @@ dependencies{
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.2.2'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.13.2'
 
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.5.2'
+    //testImplementation 'org.junit.jupiter:junit-jupiter:5.5.2'
 }
 

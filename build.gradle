@@ -1,6 +1,22 @@
+//server と client をどちらとも動かす 
 plugins{
     id 'java'
     id 'application'
+}
+
+//build jar file settings
+jar {
+    manifest {
+        attributes 'Main-Class': "ServerClient"
+    }
+    dependencies{
+        //Jackson: json  <=> class object 
+        implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.13.2'
+        implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.2.2'
+        implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.13.2'
+
+        testImplementation 'org.junit.jupiter:junit-jupiter:5.5.2'
+    }
 }
 
 application{
