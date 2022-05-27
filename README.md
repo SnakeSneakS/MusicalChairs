@@ -2,7 +2,7 @@
 ## Usage
 1. [Install gradle.](https://dev.classmethod.jp/articles/gradle-step-by-step/). 
     - どうしてgradleが必要なんですか <- 外部パッケージを使うのに便利そうだったから。 
-2. ~~build: ```gradle build```~~ 開発時にはbuildせずに直接runで大丈夫 
+2. ~~build: ```gradle build```~~ 開発時にはbuildせずに直接runで大丈夫なはず... 
 3. run: ```gradle run``` 
 4. if you want to clean, run ```gradle clean```.
 
@@ -48,3 +48,7 @@ $cr = \mathrm{circleRadius}\ (椅子の半径),\ margin = 椅子同士の余白,
 - 色が必ずしもユニークではない。 
 - サーバーを立てて異なる端末間で通信したい。 
 
+<!--
+Unknown, Uncertain bug: 
+- dockerを起動している時には外部ライブラリがうまく使えない(?)  
+-->
