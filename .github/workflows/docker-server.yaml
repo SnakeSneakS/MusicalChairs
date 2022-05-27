@@ -5,13 +5,10 @@ on:
   push: 
     branches:
       - main
-  pull_request:
-    branches:
-      - main
     paths: 
       - src/main/java/** 
       - server.build.gradle 
-      - Dockerfile 
+      - Dockerfile     
 
 env: 
   REGISTRY: ghcr.io
@@ -33,7 +30,7 @@ jobs:
         include: 
           - name: MusicalChairs-server
             file: Dockerfile
-            target: release  
+            target: deploy  
 
     steps: 
       - name: checkout
@@ -74,4 +71,3 @@ jobs:
           target: ${{ matrix.target }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          
