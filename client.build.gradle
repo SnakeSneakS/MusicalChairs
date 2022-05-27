@@ -1,3 +1,5 @@
+//Clientのみ動かすbuild setting
+
 plugins{
     id 'java'
     id 'application'
@@ -5,6 +7,10 @@ plugins{
 
 application{
     mainClass = "Client.GameFrame" //Client.GameFrame //Server.Server //ServerClient
+}
+
+compileJava {
+    options.encoding = 'UTF-8'
 }
 
 repositories {

@@ -1,10 +1,23 @@
+//Serverのみ動かすbuild setting
+
 plugins{
     id 'java'
     id 'application'
 }
 
+//外部ライブラリをjarファイルに入れることができていないため、jar単独では動かせない
+jar {
+    manifest {
+        attributes 'Main-Class': "Server.Server"
+    }
+}
+
 application{
     mainClass = "Server.Server" //Client.GameFrame //Server.Server //ServerClient
+}
+
+compileJava {
+    options.encoding = 'UTF-8'
 }
 
 repositories {
