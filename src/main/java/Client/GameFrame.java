@@ -173,6 +173,9 @@ public class GameFrame extends JFrame {
                     JFrame jFrame = new JFrame();
                     if(goc.players.size()==1){
                         JOptionPane.showMessageDialog(jFrame, "Game END!! Winner is:"+goc.players.get(0).name);
+                        if(goc.players.get(0).ID==myID){
+                            JOptionPane.showMessageDialog(jFrame, "You are Winner!!");
+                        }
                     }else{
                         JOptionPane.showMessageDialog(jFrame, "Game END!! No Winner");
                     }
@@ -364,7 +367,7 @@ public class GameFrame extends JFrame {
        
 
     public static void main (String[] args) {
-        final int clientNum = 2; //幾つのクライアントを動作させるか 
+        final int clientNum = 1; //幾つのクライアントを動作させるか 
         Thread[] t = new Thread[clientNum];
         for(int i=0;i<clientNum;i++){
             t[i] = new Thread(){
