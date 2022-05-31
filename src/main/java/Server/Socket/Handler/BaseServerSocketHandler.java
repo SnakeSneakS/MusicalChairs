@@ -123,8 +123,10 @@ public abstract class BaseServerSocketHandler {
                 }
             }
         }catch(SocketException se){
+            se.printStackTrace();
             throw se;
         }catch(Exception e){
+            e.printStackTrace();
             throw e;
         }finally{
             close();

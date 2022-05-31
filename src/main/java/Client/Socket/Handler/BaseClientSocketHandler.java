@@ -128,11 +128,15 @@ public abstract class BaseClientSocketHandler{
 
         }catch(ConnectException ce){
             System.err.printf("Connect Exception happened! \n%s\n", ce);
+            ce.printStackTrace();
             return;
         }catch(UnknownHostException uhe){
             System.err.printf("Unknown Host Exception!\nhost: %s\n%s\n", this.hostname, uhe);
+            uhe.printStackTrace();
             throw uhe;
         }catch(Exception e){
+            System.err.printf("Exception happened!\nhost: %s\n%s\n", this.hostname, e);
+            e.printStackTrace();
             throw e;
         }finally{
             close();

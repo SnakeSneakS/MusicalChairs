@@ -3,7 +3,9 @@ plugins{
     id 'application'
 }
 
+
 application{
+    //Clientのみ起動する 
     mainClass = "Client.GameFrame" //Client.GameFrame //Server.Server //ServerClient
 }
 

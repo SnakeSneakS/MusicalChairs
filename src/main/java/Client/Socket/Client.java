@@ -34,7 +34,6 @@ public class Client extends BaseClientSocketHandler{
 
     @Override
     protected void OnReceive(String line) {
-        //System.out.printf("Message from server: %s\n",line); //for debug
         jsonHandler.handle(line);
     }
 

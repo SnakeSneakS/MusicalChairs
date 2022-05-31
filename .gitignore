@@ -4,3 +4,7 @@
 # Ignore Gradle build output directory
 build
 *.class 
+
+
+# ignore environmental variables
+.env 

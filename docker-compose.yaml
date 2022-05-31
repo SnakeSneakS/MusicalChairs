@@ -1,0 +1,10 @@
+version: "2"
+services:
+  musical-chairs-server:
+    build: .
+    ports:
+      - "30080:8080" #localの30080portをコンテナの8080ポートに紐付ける  
+    #portやhostnameを変える場合は以下を設定する 
+    #env_file: 
+    #  - .env
+    

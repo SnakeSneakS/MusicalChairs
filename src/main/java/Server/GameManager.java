@@ -2,6 +2,7 @@ package Server;
 
 import java.net.Socket;
 
+import Common.Model.Env;
 import Common.Model.GameModel.User;
 import Server.Room.RoomManager;
 import Server.Room.User.GameUser;
@@ -9,7 +10,7 @@ import Server.Socket.*;
 import Server.Socket.Handler.ServerSocketHandler;
 
 public class GameManager {
-    private static final int port = 8080;
+    static final int port = (System.getenv(Env.env_port)!=null)? Integer.parseInt(System.getenv(Env.env_port)):Env.default_port; 
 
     public GameManager(RoomManager roomManager){
         new ServerSocketManager(GameManager.port){

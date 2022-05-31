@@ -17,6 +17,7 @@ import Client.GameObject.Chair;
 import Client.GameObject.Player;
 import Client.Socket.Client;
 import Client.Socket.Handler.JsonHandler;
+import Common.Model.Env;
 import Common.Model.SocketModel.DamagedRes;
 import Common.Model.SocketModel.GameEndRes;
 import Common.Model.SocketModel.GameStartReq;
@@ -47,8 +48,8 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 public class GameFrame extends JFrame {
     final String hostname = "k8s.snakesneaks.xyz";
     final int port = 30333;
-
-    // ウィンドウの内側の高さと幅
+    
+    // ウィンドウの内側の高さと幅 
     public static final int height = 700;
     public static final int width = 700;
     final GameObjectController goc;
