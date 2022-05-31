@@ -17,6 +17,7 @@ import Client.GameObject.Chair;
 import Client.GameObject.Player;
 import Client.Socket.Client;
 import Client.Socket.Handler.JsonHandler;
+import Common.Model.Env;
 import Common.Model.SocketModel.DamagedRes;
 import Common.Model.SocketModel.GameEndRes;
 import Common.Model.SocketModel.GameStartReq;
@@ -45,10 +46,10 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 // 描画担当
 public class GameFrame extends JFrame {
-    final String hostname = "localhost";
-    final int port = 8080;
+    final String hostname = (System.getenv(Env.env_hostname)!=null)?System.getenv(Env.env_hostname):Env.default_hostname;
+    final int port = (System.getenv(Env.env_port)!=null)? Integer.parseInt(System.getenv(Env.env_port)):Env.default_port; 
 
-    // ウィンドウの内側の高さと幅
+    // ウィンドウの内側の高さと幅 
     public static final int height = 700;
     public static final int width = 700;
     final GameObjectController goc;

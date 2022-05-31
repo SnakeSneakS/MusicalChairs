@@ -3,8 +3,13 @@ plugins{
     id 'application'
 }
 
+
 application{
-    mainClass = "ServerClient" //Client.GameFrame //Server.Server //ServerClient
+    //Clientのみ起動する 
+    mainClass = "ServerClient"
+
+    //ServerClient両方とも起動する
+    //mainClass = "ServerClient" //Client.GameFrame //Server.Server //ServerClient
 }
 
 compileJava {
