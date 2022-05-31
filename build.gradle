@@ -6,7 +6,10 @@ plugins{
 
 application{
     //Clientのみ起動する 
-    mainClass = "Client.GameFrame" //Client.GameFrame //Server.Server //ServerClient
+    mainClass = "Client.GameFrame"
+
+    //ServerClient両方とも起動する
+    //mainClass = "ServerClient" //Client.GameFrame //Server.Server //ServerClient
 }
 
 compileJava {

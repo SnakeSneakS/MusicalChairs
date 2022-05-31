@@ -46,9 +46,9 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 // 描画担当
 public class GameFrame extends JFrame {
-    final String hostname = "k8s.snakesneaks.xyz";
-    final int port = 30333;
-    
+    final String hostname = (System.getenv(Env.env_hostname)!=null)?System.getenv(Env.env_hostname):Env.default_hostname;
+    final int port = (System.getenv(Env.env_port)!=null)? Integer.parseInt(System.getenv(Env.env_port)):Env.default_port; 
+
     // ウィンドウの内側の高さと幅 
     public static final int height = 700;
     public static final int width = 700;
@@ -173,6 +173,9 @@ public class GameFrame extends JFrame {
                     JFrame jFrame = new JFrame();
                     if(goc.players.size()==1){
                         JOptionPane.showMessageDialog(jFrame, "Game END!! Winner is:"+goc.players.get(0).name);
+                        if(goc.players.get(0).ID==myID){
+                            JOptionPane.showMessageDialog(jFrame, "You are Winner!!");
+                        }
                     }else{
                         JOptionPane.showMessageDialog(jFrame, "Game END!! No Winner");
                     }
