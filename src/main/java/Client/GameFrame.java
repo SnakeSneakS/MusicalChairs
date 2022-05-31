@@ -45,8 +45,8 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 // 描画担当
 public class GameFrame extends JFrame {
-    final String hostname = "localhost";
-    final int port = 8080;
+    final String hostname = "k8s.snakesneaks.xyz";
+    final int port = 30333;
 
     // ウィンドウの内側の高さと幅
     public static final int height = 700;
@@ -180,6 +180,7 @@ public class GameFrame extends JFrame {
                 @Override
                 public void handlePlayMusicRes(PlayMusicRes playMusicRes) {
                     if(playMusicRes.isPlay==true){
+                        clip.setFramePosition(0);
                         clip.start();
                         FloatControl ctrl = (FloatControl)clip.getControl(FloatControl.Type.MASTER_GAIN);
                         ctrl.setValue((float)Math.log10((float)0.6 / 20)*20);
@@ -363,7 +364,7 @@ public class GameFrame extends JFrame {
        
 
     public static void main (String[] args) {
-        final int clientNum = 2; //幾つのクライアントを動作させるか 
+        final int clientNum = 3; //幾つのクライアントを動作させるか 
         Thread[] t = new Thread[clientNum];
         for(int i=0;i<clientNum;i++){
             t[i] = new Thread(){
