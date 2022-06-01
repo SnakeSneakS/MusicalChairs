@@ -184,6 +184,7 @@ public class GameFrame extends JFrame {
                 @Override
                 public void handlePlayMusicRes(PlayMusicRes playMusicRes) {
                     if(playMusicRes.isPlay==true){
+                        clip.setFramePosition(0);
                         clip.start();
                         FloatControl ctrl = (FloatControl)clip.getControl(FloatControl.Type.MASTER_GAIN);
                         ctrl.setValue((float)Math.log10((float)0.6 / 20)*20);
