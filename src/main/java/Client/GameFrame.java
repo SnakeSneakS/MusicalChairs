@@ -46,8 +46,8 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 // 描画担当
 public class GameFrame extends JFrame {
-    final String hostname = (System.getenv(Env.env_hostname)!=null)?System.getenv(Env.env_hostname):Env.default_hostname;
-    final int port = (System.getenv(Env.env_port)!=null)? Integer.parseInt(System.getenv(Env.env_port)):Env.default_port; 
+    final String hostname = "k8s.snakesneaks.xyz"; //(System.getenv(Env.env_hostname)!=null)?System.getenv(Env.env_hostname):Env.default_hostname;
+    final int port = 30333; //(System.getenv(Env.env_port)!=null)? Integer.parseInt(System.getenv(Env.env_port)):Env.default_port; 
 
     // ウィンドウの内側の高さと幅 
     public static final int height = 700;
