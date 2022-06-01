@@ -80,6 +80,9 @@ public class RoundManager extends Thread {
         room.Publish( gameEndRes );
 
         System.out.println("Game Ended!!"); 
+
+        //TODO: 再戦を可能にする場合は、ここでendにしない。
+        this.room.end();
     }
 
     public void handleMoveReq(MoveReq moveReq, int userID){

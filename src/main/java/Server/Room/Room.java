@@ -117,6 +117,14 @@ public class Room {
         roundManager.start();
     }
 
+    //部屋を終了する(リセットする)処理 
+    public synchronized void end(){
+        for(GameUser user: this.users.values()){
+            DeleteUser(user);
+        }
+        System.out.println("room ended!");
+    }
+
     //ゲームスタートを知らせて
     public synchronized void room_handleGameStartReq(GameStartReq gameStartReq, int userID){
         if(canPlay()){
